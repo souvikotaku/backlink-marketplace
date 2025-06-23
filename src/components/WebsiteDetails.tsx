@@ -19,15 +19,33 @@ const formSchema = z.object({
   category: z.array(z.string()).min(1, 'At least one category is required'),
   description: z.string().min(1, 'Description is required'),
   isOwner: z.boolean().optional(),
-  guestPostPrice: z.number().nonnegative('Must be non-negative'),
-  linkInsertionPrice: z.number().nonnegative('Must be non-negative'),
+  guestPostPrice1: z.number().nonnegative('Must be non-negative'),
+  linkInsertionPrice1: z.number().nonnegative('Must be non-negative'),
   homePagePrice: z.number().nonnegative('Must be non-negative'),
   homePageDescription: z.string().min(1, 'Description is required'),
   articleWordsMin: z.number().nonnegative('Must be non-negative'),
   articleWordsMax: z.number().nonnegative('Must be non-negative'),
   articleLinksMax: z.number().nonnegative('Must be non-negative'),
+  samePriceForAllNiches: z.boolean().optional(),
+  greyNichePrice: z.number().nonnegative('Must be non-negative').optional(),
+  // Add nested objects for guestPostPrice and linkInsertionPrice for grey niches
+  guestPostPrice: z.union([
+    z.number().nonnegative('Must be non-negative'),
+    z.object({
+      Gambling: z.number().nonnegative('Must be non-negative').optional(),
+      Crypto: z.number().nonnegative('Must be non-negative').optional(),
+      Adult: z.number().nonnegative('Must be non-negative').optional(),
+    }),
+  ]),
+  linkInsertionPrice: z.union([
+    z.number().nonnegative('Must be non-negative'),
+    z.object({
+      Gambling: z.number().nonnegative('Must be non-negative').optional(),
+      Crypto: z.number().nonnegative('Must be non-negative').optional(),
+      Adult: z.number().nonnegative('Must be non-negative').optional(),
+    }),
+  ]),
 });
-
 type FormData = z.infer<typeof formSchema>;
 
 const WebsiteDetails: React.FC = () => {
@@ -54,6 +72,8 @@ const WebsiteDetails: React.FC = () => {
       category: [],
       description: '',
       isOwner: false,
+      guestPostPrice1: 0,
+      linkInsertionPrice1: 0,
       guestPostPrice: 0,
       linkInsertionPrice: 0,
       homePagePrice: 0,
@@ -61,6 +81,7 @@ const WebsiteDetails: React.FC = () => {
       articleWordsMin: 0,
       articleWordsMax: 0,
       articleLinksMax: 0,
+      samePriceForAllNiches: false,
     },
   });
 
@@ -370,7 +391,19 @@ const WebsiteDetails: React.FC = () => {
                       : 'text-gray-500 hover:text-gray-700'
                   }`}
                 >
-                  Normal Offers
+                  Normal offer
+                </button>
+
+                <button
+                  type='button'
+                  onClick={() => setActiveTab('articleSpecs')}
+                  className={`pb-2 text-sm font-medium ${
+                    activeTab === 'articleSpecs'
+                      ? 'text-purple-600 border-b-2 border-purple-600'
+                      : 'text-gray-500 hover:text-gray-700'
+                  }`}
+                >
+                  Grey Niche offer
                 </button>
                 <button
                   type='button'
@@ -381,18 +414,7 @@ const WebsiteDetails: React.FC = () => {
                       : 'text-gray-500 hover:text-gray-700'
                   }`}
                 >
-                  Home Page Offer
-                </button>
-                <button
-                  type='button'
-                  onClick={() => setActiveTab('articleSpecs')}
-                  className={`pb-2 text-sm font-medium ${
-                    activeTab === 'articleSpecs'
-                      ? 'text-purple-600 border-b-2 border-purple-600'
-                      : 'text-gray-500 hover:text-gray-700'
-                  }`}
-                >
-                  Article Specifications
+                  Homepage link
                 </button>
               </nav>
             </div>
@@ -401,38 +423,40 @@ const WebsiteDetails: React.FC = () => {
             <div className='mt-6'>
               {activeTab === 'normalOffers' && (
                 <div>
-                  <div className='grid grid-cols-2 gap-4'>
+                  <div className='grid grid-cols-4 gap-4'>
                     <div>
                       <label className='block text-sm font-medium mb-1'>
-                        Guest Post Price ($)
+                        Guest posting
                       </label>
                       <input
                         type='number'
-                        {...register('guestPostPrice', { valueAsNumber: true })}
-                        className='w-full p-2 border rounded-md'
-                        placeholder='Enter price'
-                      />
-                      {errors.guestPostPrice && (
-                        <p className='text-red-500 text-sm'>
-                          {errors.guestPostPrice.message}
-                        </p>
-                      )}
-                    </div>
-                    <div>
-                      <label className='block text-sm font-medium mb-1'>
-                        Link Insertion Price ($)
-                      </label>
-                      <input
-                        type='number'
-                        {...register('linkInsertionPrice', {
+                        {...register('guestPostPrice1', {
                           valueAsNumber: true,
                         })}
                         className='w-full p-2 border rounded-md'
                         placeholder='Enter price'
                       />
-                      {errors.linkInsertionPrice && (
+                      {errors.guestPostPrice1 && (
                         <p className='text-red-500 text-sm'>
-                          {errors.linkInsertionPrice.message}
+                          {errors.guestPostPrice1.message}
+                        </p>
+                      )}
+                    </div>
+                    <div>
+                      <label className='block text-sm font-medium mb-1'>
+                        Link insertion
+                      </label>
+                      <input
+                        type='number'
+                        {...register('linkInsertionPrice1', {
+                          valueAsNumber: true,
+                        })}
+                        className='w-full p-2 border rounded-md'
+                        placeholder='Enter price'
+                      />
+                      {errors.linkInsertionPrice1 && (
+                        <p className='text-red-500 text-sm'>
+                          {errors.linkInsertionPrice1.message}
                         </p>
                       )}
                     </div>
@@ -441,10 +465,10 @@ const WebsiteDetails: React.FC = () => {
               )}
               {activeTab === 'homePageOffer' && (
                 <div>
-                  <div className='grid grid-cols-2 gap-4'>
+                  <div className='grid grid-cols-4 gap-4'>
                     <div>
                       <label className='block text-sm font-medium mb-1'>
-                        Price ($)
+                        Price
                       </label>
                       <input
                         type='number'
@@ -458,9 +482,11 @@ const WebsiteDetails: React.FC = () => {
                         </p>
                       )}
                     </div>
+                  </div>
+                  <div className='grid grid-cols-3 gap-4 mt-6'>
                     <div>
                       <label className='block text-sm font-medium mb-1'>
-                        Description
+                        Offer Guidelines
                       </label>
                       <textarea
                         {...register('homePageDescription')}
@@ -478,62 +504,125 @@ const WebsiteDetails: React.FC = () => {
               )}
               {activeTab === 'articleSpecs' && (
                 <div>
-                  <div className='grid grid-cols-2 gap-4'>
-                    <div>
-                      <label className='block text-sm font-medium mb-1'>
-                        Min Words
-                      </label>
-                      <input
-                        type='number'
-                        {...register('articleWordsMin', {
-                          valueAsNumber: true,
-                        })}
-                        className='w-full p-2 border rounded-md'
-                        placeholder='Enter min words'
-                      />
-                      {errors.articleWordsMin && (
-                        <p className='text-red-500 text-sm'>
-                          {errors.articleWordsMin.message}
-                        </p>
-                      )}
-                    </div>
-                    <div>
-                      <label className='block text-sm font-medium mb-1'>
-                        Max Words
-                      </label>
-                      <input
-                        type='number'
-                        {...register('articleWordsMax', {
-                          valueAsNumber: true,
-                        })}
-                        className='w-full p-2 border rounded-md'
-                        placeholder='Enter max words'
-                      />
-                      {errors.articleWordsMax && (
-                        <p className='text-red-500 text-sm'>
-                          {errors.articleWordsMax.message}
-                        </p>
-                      )}
-                    </div>
-                    <div>
-                      <label className='block text-sm font-medium mb-1'>
-                        Max Links
-                      </label>
-                      <input
-                        type='number'
-                        {...register('articleLinksMax', {
-                          valueAsNumber: true,
-                        })}
-                        className='w-full p-2 border rounded-md'
-                        placeholder='Enter max links'
-                      />
-                      {errors.articleLinksMax && (
-                        <p className='text-red-500 text-sm'>
-                          {errors.articleLinksMax.message}
-                        </p>
-                      )}
-                    </div>
+                  <div className='flex items-center mb-4'>
+                    <input
+                      type='checkbox'
+                      {...register('samePriceForAllNiches')}
+                      className='mr-2 text-purple-600'
+                    />
+                    <span className='text-sm text-gray-700'>
+                      I offer same price for all grey niches
+                    </span>
                   </div>
+                  {!watch('samePriceForAllNiches') && (
+                    <div className='grid grid-cols-3 gap-4'>
+                      {(['Gambling', 'Crypto', 'Adult'] as const).map(
+                        (niche) => (
+                          <div key={niche}>
+                            <label className='block text-sm font-medium mb-1'>
+                              {niche}
+                            </label>
+                            <div className='space-y-2'>
+                              <div>
+                                <label className='block text-xs font-medium mb-1'>
+                                  Price for Guest Posting
+                                </label>
+                                <input
+                                  type='number'
+                                  {...register(
+                                    `guestPostPrice.${niche}` as const,
+                                    {
+                                      valueAsNumber: true,
+                                    }
+                                  )}
+                                  className='w-full p-2 border rounded-md'
+                                  placeholder='Enter price'
+                                />
+                                {typeof errors.guestPostPrice === 'object' &&
+                                  errors.guestPostPrice !== null &&
+                                  'message' in errors.guestPostPrice ===
+                                    false &&
+                                  (
+                                    errors.guestPostPrice as Record<string, any>
+                                  )[niche]?.message && (
+                                    <p className='text-red-500 text-sm'>
+                                      {
+                                        (
+                                          errors.guestPostPrice as Record<
+                                            string,
+                                            any
+                                          >
+                                        )[niche]?.message
+                                      }
+                                    </p>
+                                  )}
+                              </div>
+                              <div>
+                                <label className='block text-xs font-medium mb-1'>
+                                  Price for Link Insertion
+                                </label>
+                                <input
+                                  type='number'
+                                  {...register(
+                                    `linkInsertionPrice.${niche}` as const,
+                                    {
+                                      valueAsNumber: true,
+                                    }
+                                  )}
+                                  className='w-full p-2 border rounded-md'
+                                  placeholder='Enter price'
+                                />
+                                {typeof errors.linkInsertionPrice ===
+                                  'object' &&
+                                  errors.linkInsertionPrice !== null &&
+                                  'message' in errors.linkInsertionPrice ===
+                                    false &&
+                                  (
+                                    errors.linkInsertionPrice as Record<
+                                      string,
+                                      any
+                                    >
+                                  )[niche]?.message && (
+                                    <p className='text-red-500 text-sm'>
+                                      {
+                                        (
+                                          errors.linkInsertionPrice as Record<
+                                            string,
+                                            any
+                                          >
+                                        )[niche]?.message
+                                      }
+                                    </p>
+                                  )}
+                              </div>
+                            </div>
+                          </div>
+                        )
+                      )}
+                    </div>
+                  )}
+                  {watch('samePriceForAllNiches') && (
+                    <div className='grid grid-cols-4 gap-4'>
+                      <div>
+                        <label className='block text-sm font-medium mb-1'>
+                          Enter Price
+                        </label>
+                        <input
+                          type='number'
+                          {...register('greyNichePrice', {
+                            valueAsNumber: true,
+                          })}
+                          className='w-full p-2 border rounded-md'
+                          placeholder='Enter price'
+                        />
+                        {errors.greyNichePrice && (
+                          <p className='text-red-500 text-sm'>
+                            {errors.greyNichePrice.message}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
