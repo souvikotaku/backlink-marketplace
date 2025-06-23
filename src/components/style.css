@@ -1,0 +1,32 @@
+.headerstyle {
+  font-size: 12px;
+  font-weight: 600;
+  color: #0f0c1b99;
+  line-height: 16px;
+}
+.tablecontent {
+  font-size: 13px;
+  font-weight: 400;
+  color: #0f0c1b;
+  line-height: 18px;
+}
+.paginationprevious {
+  border-top: #eaeaea 2px solid;
+  border-right: none;
+  border-bottom: #eaeaea 2px solid;
+  border-left: #eaeaea 2px solid;
+  border-radius: 10px 0px 0px 10px;
+}
+.paginationnext {
+  border-top: #eaeaea 2px solid;
+  border-right: #eaeaea 2px solid;
+  border-bottom: #eaeaea 2px solid;
+  border-left: none;
+  border-radius: 0px 10px 10px 0px;
+}
+
+.paginationfont {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+}

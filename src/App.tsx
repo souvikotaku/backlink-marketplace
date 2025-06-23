@@ -6,7 +6,7 @@ import WebsiteDetails from './components/WebsiteDetails';
 const App: React.FC = () => {
   return (
     <Router>
-      <div className='min-h-screen bg-gray-100'>
+      <div className='min-h-screen'>
         <Routes>
           <Route path='/' element={<WebsiteList />} />
           <Route path='/add' element={<WebsiteDetails />} />
