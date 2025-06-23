@@ -30,3 +30,13 @@
   font-weight: 500;
   line-height: 20px;
 }
+.headerfont {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+}
+.headeractivecolor {
+  color: #613fdd;
+  font-weight: 600;
+  border-color: #613fdd;
+}

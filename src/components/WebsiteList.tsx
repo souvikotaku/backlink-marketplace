@@ -9,12 +9,17 @@ import { IoDiceSharp } from 'react-icons/io5';
 import { BiSolidDollarCircle } from 'react-icons/bi';
 import { GiHeartPlus } from 'react-icons/gi';
 import { BsIncognito } from 'react-icons/bs';
-import { PiFlowerLotus } from 'react-icons/pi';
+import { PiFlowerLotus, PiNut } from 'react-icons/pi';
+import logo from '../assets/logo.png';
+import { LuWalletMinimal } from 'react-icons/lu';
+import { FiShoppingBag } from 'react-icons/fi';
+import { LuUser } from 'react-icons/lu';
 
 const WebsiteList: React.FC = memo(() => {
   const dispatch = useDispatch();
   const websites = useSelector((state: RootState) => state.websites.websites);
   const [currentPage, setCurrentPage] = useState(1);
+  const [activeTab, setActiveTab] = useState('My websites'); // State to track active tab
   const itemsPerPage = 10;
 
   const navigate = useNavigate();
@@ -24,7 +29,7 @@ const WebsiteList: React.FC = memo(() => {
   };
 
   // Pagination logic with reversed websites
-  const reversedWebsites = [...websites].reverse(); // Create a reversed copy of the array
+  const reversedWebsites = [...websites].reverse();
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentWebsites = reversedWebsites.slice(
@@ -35,7 +40,7 @@ const WebsiteList: React.FC = memo(() => {
 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
-  // Mock flag and icon data (replace with actual data or icons)
+  // Mock flag and icon data
   const getFlag = (country: any) => {
     const flags: any = { 'United States': '🇺🇸', Germany: '🇩🇪' };
     return flags[country] || '';
@@ -47,42 +52,144 @@ const WebsiteList: React.FC = memo(() => {
     <GiHeartPlus />,
     <BsIncognito />,
     <PiFlowerLotus />,
-  ]; // Replace with actual icons
+  ];
 
   return (
-    <div className='container mx-auto p-4'>
+    <div className='container mx-auto pb-4'>
       {/* Header */}
-      <div className='flex justify-between items-center mb-6 border-b pb-2'>
+      <div className='flex justify-between items-center mb-6 border-b'>
         <div className='flex items-center'>
           <img
-            src='/path/to/kraken-logo.png'
+            src={logo}
             alt='Kraken Logo'
-            className='h-6 mr-4'
+            className='h-14'
+            style={{
+              marginRight: '8rem',
+            }}
           />
-          <nav className='flex space-x-6'>
-            <a href='#' className='text-gray-500 hover:text-gray-700'>
-              Marketplace
+          <nav className='flex h-14'>
+            <a
+              href='#'
+              className={`text-gray-500 hover:text-gray-700 items-center flex px-3 headerfont ${
+                activeTab === 'Marketplace'
+                  ? 'border-b-2 headeractivecolor'
+                  : ''
+              }`}
+              style={{
+                backgroundColor:
+                  activeTab === 'Marketplace' ? '#f3effc' : 'transparent',
+              }}
+              onClick={(e) => {
+                e.preventDefault();
+                setActiveTab('Marketplace');
+              }}
+            >
+              <span>Marketplace</span>
             </a>
-            <a href='#' className='text-purple-600 font-semibold'>
-              My websites
+            <a
+              href='#'
+              className={`text-gray-500 hover:text-gray-700 items-center flex px-3 headerfont ${
+                activeTab === 'My websites'
+                  ? 'border-b-2 headeractivecolor'
+                  : ''
+              }`}
+              onClick={(e) => {
+                e.preventDefault();
+                setActiveTab('My websites');
+              }}
+              style={{
+                backgroundColor:
+                  activeTab === 'My websites' ? '#f3effc' : 'transparent',
+              }}
+            >
+              <span>My websites</span>
             </a>
-            <a href='#' className='text-gray-500 hover:text-gray-700'>
-              My Orders
+            <a
+              href='#'
+              className={`text-gray-500 hover:text-gray-700 items-center flex px-3 headerfont ${
+                activeTab === 'My Orders' ? 'border-b-2 headeractivecolor' : ''
+              }`}
+              style={{
+                backgroundColor:
+                  activeTab === 'My Orders' ? '#f3effc' : 'transparent',
+              }}
+              onClick={(e) => {
+                e.preventDefault();
+                setActiveTab('My Orders');
+              }}
+            >
+              <span>My Orders</span>
             </a>
-            <a href='#' className='text-gray-500 hover:text-gray-700'>
-              My projects
+            <a
+              href='#'
+              className={`text-gray-500 hover:text-gray-700 items-center flex px-3 headerfont ${
+                activeTab === 'My projects'
+                  ? 'border-b-2 headeractivecolor'
+                  : ''
+              }`}
+              style={{
+                backgroundColor:
+                  activeTab === 'My projects' ? '#f3effc' : 'transparent',
+              }}
+              onClick={(e) => {
+                e.preventDefault();
+                setActiveTab('My projects');
+              }}
+            >
+              <span>My projects</span>
             </a>
-            <a href='#' className='text-gray-500 hover:text-gray-700'>
-              Received orders
+            <a
+              href='#'
+              className={`text-gray-500 hover:text-gray-700 items-center flex px-3 headerfont ${
+                activeTab === 'Received orders'
+                  ? 'border-b-2 headeractivecolor'
+                  : ''
+              }`}
+              style={{
+                backgroundColor:
+                  activeTab === 'Received orders' ? '#f3effc' : 'transparent',
+              }}
+              onClick={(e) => {
+                e.preventDefault();
+                setActiveTab('Received orders');
+              }}
+            >
+              <span>Received orders</span>
             </a>
           </nav>
         </div>
-        <div className='flex space-x-4'>
+        <div className='flex space-x-6'>
           <span className='text-gray-500 hover:text-gray-700 cursor-pointer'>
-            🔔
+            <LuWalletMinimal
+              style={{
+                fontSize: '24px',
+                color: '#b1b1b1',
+              }}
+            />
           </span>
           <span className='text-gray-500 hover:text-gray-700 cursor-pointer'>
-            👤
+            <FiShoppingBag
+              style={{
+                fontSize: '24px',
+                color: '#b1b1b1',
+              }}
+            />
+          </span>
+          <span className='text-gray-500 hover:text-gray-700 cursor-pointer'>
+            <LuUser
+              style={{
+                fontSize: '24px',
+                color: '#b1b1b1',
+              }}
+            />
+          </span>
+          <span className='text-gray-500 hover:text-gray-700 cursor-pointer'>
+            <PiNut
+              style={{
+                fontSize: '24px',
+                color: '#b1b1b1',
+              }}
+            />
           </span>
         </div>
       </div>
@@ -140,7 +247,9 @@ const WebsiteList: React.FC = memo(() => {
                 }`}
                 onClick={() => navigate(`/edit/${website.id}`)}
               >
-                <td className='p-3 tablecontent'>{website.url}</td>
+                <td className='p-3 tablecontent'>
+                  {website.url.replace(/^https?:\/\//, '')}
+                </td>
                 <td className='p-3 tablecontent'>
                   {getFlag(website.country)} {website.country}
                 </td>
