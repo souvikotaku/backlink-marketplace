@@ -14,12 +14,13 @@ import logo from '../assets/logo.png';
 import { LuWalletMinimal } from 'react-icons/lu';
 import { FiShoppingBag } from 'react-icons/fi';
 import { LuUser } from 'react-icons/lu';
+import ReactCountryFlag from 'react-country-flag';
 
 const WebsiteList: React.FC = memo(() => {
   const dispatch = useDispatch();
   const websites = useSelector((state: RootState) => state.websites.websites);
   const [currentPage, setCurrentPage] = useState(1);
-  const [activeTab, setActiveTab] = useState('My websites'); // State to track active tab
+  const [activeTab, setActiveTab] = useState('My websites');
   const itemsPerPage = 10;
 
   const navigate = useNavigate();
@@ -28,7 +29,6 @@ const WebsiteList: React.FC = memo(() => {
     navigate('/add');
   };
 
-  // Pagination logic with reversed websites
   const reversedWebsites = [...websites].reverse();
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -40,11 +40,15 @@ const WebsiteList: React.FC = memo(() => {
 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
-  // Mock flag and icon data
-  const getFlag = (country: any) => {
-    const flags: any = { 'United States': '🇺🇸', Germany: '🇩🇪' };
-    return flags[country] || '';
+  const countryCodeMap: { [key: string]: string } = {
+    'United States': 'US',
+    Germany: 'DE',
   };
+
+  const getCountryCode = (country: string): string => {
+    return countryCodeMap[country] || 'UN';
+  };
+
   const nicheIcons = [
     <FaBitcoin />,
     <IoDiceSharp />,
@@ -56,16 +60,13 @@ const WebsiteList: React.FC = memo(() => {
 
   return (
     <div className='container mx-auto pb-4'>
-      {/* Header */}
       <div className='flex justify-between items-center mb-6 border-b'>
         <div className='flex items-center'>
           <img
             src={logo}
             alt='Kraken Logo'
             className='h-14'
-            style={{
-              marginRight: '8rem',
-            }}
+            style={{ marginRight: '8rem' }}
           />
           <nav className='flex h-14'>
             <a
@@ -160,36 +161,16 @@ const WebsiteList: React.FC = memo(() => {
         </div>
         <div className='flex space-x-6'>
           <span className='text-gray-500 hover:text-gray-700 cursor-pointer'>
-            <LuWalletMinimal
-              style={{
-                fontSize: '24px',
-                color: '#b1b1b1',
-              }}
-            />
+            <LuWalletMinimal style={{ fontSize: '24px', color: '#b1b1b1' }} />
           </span>
           <span className='text-gray-500 hover:text-gray-700 cursor-pointer'>
-            <FiShoppingBag
-              style={{
-                fontSize: '24px',
-                color: '#b1b1b1',
-              }}
-            />
+            <FiShoppingBag style={{ fontSize: '24px', color: '#b1b1b1' }} />
           </span>
           <span className='text-gray-500 hover:text-gray-700 cursor-pointer'>
-            <LuUser
-              style={{
-                fontSize: '24px',
-                color: '#b1b1b1',
-              }}
-            />
+            <LuUser style={{ fontSize: '24px', color: '#b1b1b1' }} />
           </span>
           <span className='text-gray-500 hover:text-gray-700 cursor-pointer'>
-            <PiNut
-              style={{
-                fontSize: '24px',
-                color: '#b1b1b1',
-              }}
-            />
+            <PiNut style={{ fontSize: '24px', color: '#b1b1b1' }} />
           </span>
         </div>
       </div>
@@ -209,11 +190,7 @@ const WebsiteList: React.FC = memo(() => {
         <button
           className='bg-purple-600 text-white px-4 rounded-lg'
           onClick={handleAddWebsite}
-          style={{
-            height: 36,
-            width: 228,
-            backgroundColor: '#613FDD',
-          }}
+          style={{ height: 36, width: 228, backgroundColor: '#613FDD' }}
         >
           + Add Website
         </button>
@@ -221,11 +198,7 @@ const WebsiteList: React.FC = memo(() => {
       <div className='bg-white rounded-lg'>
         <table className='w-full'>
           <thead>
-            <tr
-              style={{
-                backgroundColor: '#faf7fe',
-              }}
-            >
+            <tr style={{ backgroundColor: '#faf7fe' }}>
               <th className='p-3 text-left headerstyle'>Website</th>
               <th className='p-3 text-left headerstyle'>Country</th>
               <th className='p-3 text-left headerstyle'>Language</th>
@@ -235,46 +208,79 @@ const WebsiteList: React.FC = memo(() => {
             </tr>
           </thead>
           <tbody>
-            {currentWebsites.map((website, index) => (
-              <tr
-                key={website.id}
-                className={`hover:bg-gray-50 cursor-pointer ${
-                  index === 0
-                    ? 'bg-white'
-                    : index % 2 === 0
-                    ? 'bg-white'
-                    : 'bg-[#faf7fe]'
-                }`}
-                onClick={() => navigate(`/edit/${website.id}`)}
-              >
-                <td className='p-3 tablecontent'>
-                  {website.url.replace(/^https?:\/\//, '')}
-                </td>
-                <td className='p-3 tablecontent'>
-                  {getFlag(website.country)} {website.country}
-                </td>
-                <td className='p-3 tablecontent'>{website.language}</td>
-                <td className='p-3 tablecontent'>{website.category}</td>
-                <td className='p-3 tablecontent'>
-                  {website.category === 'Computer & Electronics'
-                    ? 'Entertainment'
-                    : ''}
-                </td>
-                <td className='p-3 flex space-x-2'>
-                  {nicheIcons.map((icon, idx) => (
-                    <span
-                      key={idx}
+            {currentWebsites.map((website, index) => {
+              let displayCategories: string[] | any;
+              let allCategories: string;
+              let originalLength: number;
+              if (Array.isArray(website.category)) {
+                originalLength = website.category.length;
+                displayCategories = website.category.slice(0, 2);
+                allCategories = website.category.join(', ');
+              } else if (typeof website.category === 'string') {
+                // Treat string as a single category item
+                displayCategories = [website.category];
+                allCategories = website.category;
+                originalLength = 1;
+              } else {
+                displayCategories = [''];
+                allCategories = '';
+                originalLength = 0;
+              }
+
+              return (
+                <tr
+                  key={website.id}
+                  className={`hover:bg-gray-50 cursor-pointer ${
+                    index === 0
+                      ? 'bg-white'
+                      : index % 2 === 0
+                      ? 'bg-white'
+                      : 'bg-[#faf7fe]'
+                  }`}
+                  onClick={() => navigate(`/edit/${website.id}`)}
+                >
+                  <td className='p-3 tablecontent'>
+                    {website.url.replace(/^https?:\/\//, '')}
+                  </td>
+                  <td className='p-3 tablecontent'>
+                    <ReactCountryFlag
+                      countryCode={getCountryCode(website.country)}
+                      svg
                       style={{
-                        color: '#613FDD',
-                        fontWeight: 600,
+                        width: '1.5em',
+                        height: '1.5em',
+                        marginRight: '0.5em',
                       }}
-                    >
-                      {icon}
+                      title={website.country}
+                    />
+                    {website.country}
+                  </td>
+                  <td className='p-3 tablecontent'>{website.language}</td>
+                  <td className='p-3 tablecontent' style={{ width: '20%' }}>
+                    <span title={allCategories}>
+                      {displayCategories.join(', ')}
+                      {originalLength > 2 && ' ...'}
                     </span>
-                  ))}
-                </td>
-              </tr>
-            ))}
+                  </td>
+                  <td
+                    className='p-3 tablecontent'
+                    // style={{ padding: '0.5rem', width: '15%' }}
+                  >
+                    {'Entertainment'}
+                  </td>
+                  <td className='p-3 flex space-x-2'>
+                    {nicheIcons.map((icon, idx) => (
+                      <span
+                        key={idx}
+                        style={{ color: '#613FDD', fontWeight: 600 }}
+                      >
+                        {icon}
+                      </span>
+                    ))}
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
@@ -294,12 +300,8 @@ const WebsiteList: React.FC = memo(() => {
               lineHeight: '20px',
             }}
           >
-            <FaArrowLeft
-              style={{
-                marginRight: '10px',
-              }}
-            />
-            Previous{' '}
+            <FaArrowLeft style={{ marginRight: '10px' }} />
+            Previous
           </span>
         </button>
         <div className='flex paginationfont'>
@@ -307,30 +309,24 @@ const WebsiteList: React.FC = memo(() => {
             <button
               onClick={() => paginate(1)}
               className='px-4 py-2 text-gray-600 hover:text-gray-800'
-              style={{
-                border: '#EAEAEA 2px solid',
-              }}
+              style={{ border: '#EAEAEA 2px solid' }}
             >
               1
             </button>
           )}
-          {currentPage > 3 && <span className='px-4 py-2'>...</span>}
+          {currentPage > 2 && <span className='px-4 py-2'>...</span>}
           {currentPage > 1 && (
             <button
               onClick={() => paginate(currentPage - 1)}
               className='px-4 py-2 text-gray-600 hover:text-gray-800'
-              style={{
-                border: '#EAEAEA 2px solid',
-              }}
+              style={{ border: '#EAEAEA 2px solid' }}
             >
               {currentPage - 1}
             </button>
           )}
           <button
             className='px-4 py-2 text-black'
-            style={{
-              backgroundColor: '#EAEAEA',
-            }}
+            style={{ backgroundColor: '#EAEAEA' }}
           >
             {currentPage}
           </button>
@@ -338,9 +334,7 @@ const WebsiteList: React.FC = memo(() => {
             <button
               onClick={() => paginate(currentPage + 1)}
               className='px-4 py-2 text-gray-600 hover:text-gray-800'
-              style={{
-                border: '#EAEAEA 2px solid',
-              }}
+              style={{ border: '#EAEAEA 2px solid' }}
             >
               {currentPage + 1}
             </button>
@@ -352,9 +346,7 @@ const WebsiteList: React.FC = memo(() => {
             <button
               onClick={() => paginate(totalPages)}
               className='px-4 py-2 text-gray-600 hover:text-gray-800'
-              style={{
-                border: '#EAEAEA 2px solid',
-              }}
+              style={{ border: '#EAEAEA 2px solid' }}
             >
               {totalPages}
             </button>
@@ -375,12 +367,8 @@ const WebsiteList: React.FC = memo(() => {
               lineHeight: '20px',
             }}
           >
-            Next{' '}
-            <FaArrowRight
-              style={{
-                marginLeft: '10px',
-              }}
-            />
+            Next
+            <FaArrowRight style={{ marginLeft: '10px' }} />
           </span>
         </button>
       </div>
