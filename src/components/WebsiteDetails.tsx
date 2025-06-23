@@ -9,7 +9,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import WebsiteHeader from './WebsiteHeader';
 import Select from 'react-select'; // Import react-select
 import { countries, languages } from 'countries-list'; // Import countries and languages data
-// Remove the dynamic import for FlagIcon, we'll use a helper function instead
 
 // Schema
 const formSchema = z.object({
@@ -514,95 +513,8 @@ const WebsiteDetails: React.FC = () => {
                       I offer same price for all grey niches
                     </span>
                   </div>
-                  {!watch('samePriceForAllNiches') && (
-                    <div className='grid grid-cols-3 gap-4'>
-                      {(['Gambling', 'Crypto', 'Adult'] as const).map(
-                        (niche) => (
-                          <div key={niche}>
-                            <label className='block text-sm font-medium mb-1'>
-                              {niche}
-                            </label>
-                            <div className='space-y-2'>
-                              <div>
-                                <label className='block text-xs font-medium mb-1'>
-                                  Price for Guest Posting
-                                </label>
-                                <input
-                                  type='number'
-                                  {...register(
-                                    `guestPostPrice.${niche}` as const,
-                                    {
-                                      valueAsNumber: true,
-                                    }
-                                  )}
-                                  className='w-full p-2 border rounded-md'
-                                  placeholder='Enter price'
-                                />
-                                {typeof errors.guestPostPrice === 'object' &&
-                                  errors.guestPostPrice !== null &&
-                                  'message' in errors.guestPostPrice ===
-                                    false &&
-                                  (
-                                    errors.guestPostPrice as Record<string, any>
-                                  )[niche]?.message && (
-                                    <p className='text-red-500 text-sm'>
-                                      {
-                                        (
-                                          errors.guestPostPrice as Record<
-                                            string,
-                                            any
-                                          >
-                                        )[niche]?.message
-                                      }
-                                    </p>
-                                  )}
-                              </div>
-                              <div>
-                                <label className='block text-xs font-medium mb-1'>
-                                  Price for Link Insertion
-                                </label>
-                                <input
-                                  type='number'
-                                  {...register(
-                                    `linkInsertionPrice.${niche}` as const,
-                                    {
-                                      valueAsNumber: true,
-                                    }
-                                  )}
-                                  className='w-full p-2 border rounded-md'
-                                  placeholder='Enter price'
-                                />
-                                {typeof errors.linkInsertionPrice ===
-                                  'object' &&
-                                  errors.linkInsertionPrice !== null &&
-                                  'message' in errors.linkInsertionPrice ===
-                                    false &&
-                                  (
-                                    errors.linkInsertionPrice as Record<
-                                      string,
-                                      any
-                                    >
-                                  )[niche]?.message && (
-                                    <p className='text-red-500 text-sm'>
-                                      {
-                                        (
-                                          errors.linkInsertionPrice as Record<
-                                            string,
-                                            any
-                                          >
-                                        )[niche]?.message
-                                      }
-                                    </p>
-                                  )}
-                              </div>
-                            </div>
-                          </div>
-                        )
-                      )}
-                    </div>
-                  )}
                   {watch('samePriceForAllNiches') && (
-                    <div className='grid grid-cols-4 gap-4'>
+                    <div className='grid grid-cols-4 gap-4 mt-4 mb-4'>
                       <div>
                         <label className='block text-sm font-medium mb-1'>
                           Enter Price
@@ -623,6 +535,83 @@ const WebsiteDetails: React.FC = () => {
                       </div>
                     </div>
                   )}
+                  <div className='grid grid-cols-3 gap-4'>
+                    {(['Gambling', 'Crypto', 'Adult'] as const).map((niche) => (
+                      <div key={niche}>
+                        <label className='block text-sm font-medium mb-1'>
+                          {niche}
+                        </label>
+                        <div className='space-y-2'>
+                          <div>
+                            <label className='block text-xs font-medium mb-1'>
+                              Price for Guest Posting
+                            </label>
+                            <input
+                              type='number'
+                              {...register(`guestPostPrice.${niche}` as const, {
+                                valueAsNumber: true,
+                              })}
+                              className='w-full p-2 border rounded-md'
+                              placeholder='Enter price'
+                              disabled={watch('samePriceForAllNiches')}
+                            />
+                            {typeof errors.guestPostPrice === 'object' &&
+                              errors.guestPostPrice !== null &&
+                              'message' in errors.guestPostPrice === false &&
+                              (errors.guestPostPrice as Record<string, any>)[
+                                niche
+                              ]?.message && (
+                                <p className='text-red-500 text-sm'>
+                                  {
+                                    (
+                                      errors.guestPostPrice as Record<
+                                        string,
+                                        any
+                                      >
+                                    )[niche]?.message
+                                  }
+                                </p>
+                              )}
+                          </div>
+                          <div>
+                            <label className='block text-xs font-medium mb-1'>
+                              Price for Link Insertion
+                            </label>
+                            <input
+                              type='number'
+                              {...register(
+                                `linkInsertionPrice.${niche}` as const,
+                                {
+                                  valueAsNumber: true,
+                                }
+                              )}
+                              className='w-full p-2 border rounded-md'
+                              placeholder='Enter price'
+                              disabled={watch('samePriceForAllNiches')}
+                            />
+                            {typeof errors.linkInsertionPrice === 'object' &&
+                              errors.linkInsertionPrice !== null &&
+                              'message' in errors.linkInsertionPrice ===
+                                false &&
+                              (
+                                errors.linkInsertionPrice as Record<string, any>
+                              )[niche]?.message && (
+                                <p className='text-red-500 text-sm'>
+                                  {
+                                    (
+                                      errors.linkInsertionPrice as Record<
+                                        string,
+                                        any
+                                      >
+                                    )[niche]?.message
+                                  }
+                                </p>
+                              )}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>
