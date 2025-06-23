@@ -16,12 +16,12 @@ import { FiShoppingBag } from 'react-icons/fi';
 import { LuUser } from 'react-icons/lu';
 import ReactCountryFlag from 'react-country-flag';
 import WebsiteHeader from './WebsiteHeader';
+import { countries } from 'countries-list'; // Import countries-list for mapping
 
 const WebsiteList: React.FC = memo(() => {
   const dispatch = useDispatch();
   const websites = useSelector((state: RootState) => state.websites.websites);
   const [currentPage, setCurrentPage] = useState(1);
-  // const [activeTab, setActiveTab] = useState('My websites');
   const itemsPerPage = 10;
 
   const navigate = useNavigate();
@@ -41,13 +41,13 @@ const WebsiteList: React.FC = memo(() => {
 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
-  const countryCodeMap: { [key: string]: string } = {
-    'United States': 'US',
-    Germany: 'DE',
-  };
+  // Create a dynamic country code map using countries-list
+  const countryCodeMap: { [key: string]: string } = Object.fromEntries(
+    Object.entries(countries).map(([code, country]) => [country.name, code])
+  );
 
   const getCountryCode = (country: string): string => {
-    return countryCodeMap[country] || 'UN';
+    return countryCodeMap[country] || 'XX'; // 'XX' is a fallback for unknown countries
   };
 
   const nicheIcons = [
@@ -61,120 +61,6 @@ const WebsiteList: React.FC = memo(() => {
 
   return (
     <div className='container mx-auto pb-4'>
-      {/* <div className='flex justify-between items-center mb-6 border-b'>
-        <div className='flex items-center'>
-          <img
-            src={logo}
-            alt='Kraken Logo'
-            className='h-14'
-            style={{ marginRight: '8rem' }}
-          />
-          <nav className='flex h-14'>
-            <a
-              href='#'
-              className={`text-gray-500 hover:text-gray-700 items-center flex px-3 headerfont ${
-                activeTab === 'Marketplace'
-                  ? 'border-b-2 headeractivecolor'
-                  : ''
-              }`}
-              style={{
-                backgroundColor:
-                  activeTab === 'Marketplace' ? '#f3effc' : 'transparent',
-              }}
-              onClick={(e) => {
-                e.preventDefault();
-                setActiveTab('Marketplace');
-              }}
-            >
-              <span>Marketplace</span>
-            </a>
-            <a
-              href='#'
-              className={`text-gray-500 hover:text-gray-700 items-center flex px-3 headerfont ${
-                activeTab === 'My websites'
-                  ? 'border-b-2 headeractivecolor'
-                  : ''
-              }`}
-              onClick={(e) => {
-                e.preventDefault();
-                setActiveTab('My websites');
-              }}
-              style={{
-                backgroundColor:
-                  activeTab === 'My websites' ? '#f3effc' : 'transparent',
-              }}
-            >
-              <span>My websites</span>
-            </a>
-            <a
-              href='#'
-              className={`text-gray-500 hover:text-gray-700 items-center flex px-3 headerfont ${
-                activeTab === 'My Orders' ? 'border-b-2 headeractivecolor' : ''
-              }`}
-              style={{
-                backgroundColor:
-                  activeTab === 'My Orders' ? '#f3effc' : 'transparent',
-              }}
-              onClick={(e) => {
-                e.preventDefault();
-                setActiveTab('My Orders');
-              }}
-            >
-              <span>My Orders</span>
-            </a>
-            <a
-              href='#'
-              className={`text-gray-500 hover:text-gray-700 items-center flex px-3 headerfont ${
-                activeTab === 'My projects'
-                  ? 'border-b-2 headeractivecolor'
-                  : ''
-              }`}
-              style={{
-                backgroundColor:
-                  activeTab === 'My projects' ? '#f3effc' : 'transparent',
-              }}
-              onClick={(e) => {
-                e.preventDefault();
-                setActiveTab('My projects');
-              }}
-            >
-              <span>My projects</span>
-            </a>
-            <a
-              href='#'
-              className={`text-gray-500 hover:text-gray-700 items-center flex px-3 headerfont ${
-                activeTab === 'Received orders'
-                  ? 'border-b-2 headeractivecolor'
-                  : ''
-              }`}
-              style={{
-                backgroundColor:
-                  activeTab === 'Received orders' ? '#f3effc' : 'transparent',
-              }}
-              onClick={(e) => {
-                e.preventDefault();
-                setActiveTab('Received orders');
-              }}
-            >
-              <span>Received orders</span>
-            </a>
-          </nav>
-        </div>
-        <div className='flex space-x-6'>
-          <span className='text-gray-500 hover:text-gray-700 cursor-pointer'>
-            <LuWalletMinimal style={{ fontSize: '24px', color: '#b1b1b1' }} />
-          </span>
-          <span className='text-gray-500 hover:text-gray-700 cursor-pointer'>
-            <FiShoppingBag style={{ fontSize: '24px', color: '#b1b1b1' }} />
-          </span>
-          <span className='text-gray-500 hover:text-gray-700 cursor-pointer'>
-            <LuUser style={{ fontSize: '24px', color: '#b1b1b1' }} />
-          </span>
-          <span className='text-gray-500 hover:text-gray-700 cursor-pointer'>
-            <PiNut style={{ fontSize: '24px', color: '#b1b1b1' }} />
-          </span>
-        </div>
-      </div> */}
       <WebsiteHeader />
       <div className='flex justify-between mb-10'>
         <h2
@@ -219,7 +105,6 @@ const WebsiteList: React.FC = memo(() => {
                 displayCategories = website.category.slice(0, 2);
                 allCategories = website.category.join(', ');
               } else if (typeof website.category === 'string') {
-                // Treat string as a single category item
                 displayCategories = [website.category];
                 allCategories = website.category;
                 originalLength = 1;
@@ -252,6 +137,7 @@ const WebsiteList: React.FC = memo(() => {
                         width: '1.5em',
                         height: '1.5em',
                         marginRight: '0.5em',
+                        verticalAlign: 'middle', // Ensure proper alignment
                       }}
                       title={website.country}
                     />
@@ -264,12 +150,7 @@ const WebsiteList: React.FC = memo(() => {
                       {originalLength > 2 && ' ...'}
                     </span>
                   </td>
-                  <td
-                    className='p-3 tablecontent'
-                    // style={{ padding: '0.5rem', width: '15%' }}
-                  >
-                    {'Entertainment'}
-                  </td>
+                  <td className='p-3 tablecontent'>{'Entertainment'}</td>
                   <td className='p-3 flex space-x-2'>
                     {nicheIcons.map((icon, idx) => (
                       <span
