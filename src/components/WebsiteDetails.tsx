@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addWebsite, updateWebsite } from '../store/websiteSlice';
 import { RootState } from '../store';
 import { useNavigate, useParams } from 'react-router-dom';
+import WebsiteHeader from './WebsiteHeader';
 
 // Schema
 const formSchema = z.object({
@@ -122,31 +123,37 @@ const WebsiteDetails: React.FC = () => {
     navigate('/'); // Redirect back to list
   };
   return (
-    <div className='container mx-auto p-6 bg-gray-50 min-h-screen'>
-      <div className='max-w-4xl mx-auto'>
+    <div className='container mx-auto pb-4'>
+      <WebsiteHeader />
+
+      <div className='max-w-6xl mx-auto'>
         <h2 className='text-2xl font-bold text-gray-900 mb-6'>
           {id ? 'Edit Website' : 'Add Website'}
         </h2>
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className='bg-white p-6 rounded-lg shadow-md space-y-8'
+          // className='bg-white p-6 rounded-lg shadow-md space-y-8'
         >
+          <h3 className='font-semibold text-gray-700 mb-4 detailhighfont'>
+            Website detail
+          </h3>
           {/* Website Details Section */}
-          <div>
-            <h3 className='text-lg font-semibold text-gray-700 mb-4'>
-              Website detail
-            </h3>
-
-            <div className='grid grid-cols-2 gap-4'>
+          <div
+            className='bg-white p-6 rounded-lg shadow-md space-y-8'
+            style={{
+              paddingRight: '10%',
+            }}
+          >
+            <div className='grid grid-cols-4 gap-4'>
               {/* Website URL */}
               <div>
-                <label className='block text-sm font-medium mb-1'>
-                  Website URL
+                <label className='block mb-1 detailsmallfont'>
+                  Enter Website
                 </label>
                 <input
                   {...register('url')}
                   className='w-full p-2 border rounded-md'
-                  placeholder='https://example.com'
+                  placeholder='Website URL'
                 />
                 {errors.url && (
                   <p className='text-red-500 text-sm'>{errors.url.message}</p>
@@ -155,8 +162,8 @@ const WebsiteDetails: React.FC = () => {
 
               {/* Language */}
               <div>
-                <label className='block text-sm font-medium mb-1'>
-                  Website's Primary Language
+                <label className='block mb-1 detailsmallfont'>
+                  Website's Primary language
                 </label>
                 <select
                   {...register('language')}
@@ -175,8 +182,8 @@ const WebsiteDetails: React.FC = () => {
 
               {/* Traffic Country */}
               <div>
-                <label className='block text-sm font-medium mb-1'>
-                  Your Majority of Traffic Comes From
+                <label className='block mb-1 detailsmallfont'>
+                  Your Majority of traffic comes from
                 </label>
                 <select
                   {...register('country')}
@@ -196,36 +203,59 @@ const WebsiteDetails: React.FC = () => {
 
             {/* Category Grid */}
             <div className='mt-6'>
-              <label className='block text-sm font-medium mb-2'>
-                Main Categories
+              <label className='block mb-2 detailsmallfont'>
+                Main Category
               </label>
-              <div className='grid grid-cols-3 gap-2'>
+              <div className='grid grid-cols-5 gap-4'>
                 {[
+                  'Animals / Pets',
                   'Art',
-                  'Energy & Solar Energy',
-                  'Gambling',
                   'Auto',
+                  'Beauty',
+                  'Blogging',
+                  'Business / Entrepreneur',
+                  'Directory',
                   'Education',
+                  'Energy & Solar Energy',
+                  'Entertainment & Music',
+                  'Environment',
+                  'Events',
+                  'Family / Parenting',
+                  'Fashion',
+                  'Finance',
                   'Food',
+                  'Gambling',
+                  'Gaming',
+                  'General',
+                  'Health & Fitness',
+                  'Home & Garden',
+                  'Italian Sites',
+                  'Legal',
                   'Lifestyle',
+                  'Marijuana / Vaporizers',
+                  'Marketing',
+                  'Medical',
+                  'News',
+                  'Other',
+                  'Outdoors',
+                  'Photography',
                   'Politics',
                   'Real Estate',
-                  'Beauty',
-                  'Entertainment & Music',
-                  'Marketing',
-                  'Blogging',
-                  'Environment',
-                  'Medical',
+                  'Environment Safety',
                   'SEO',
-                  'Events',
-                  'Family & Parenting',
-                  'Finance',
-                  'Home & Garden',
-                  'News',
+                  'Sex & Adult',
+                  'Shopping',
                 ].map((cat) => (
                   <label
                     key={cat}
-                    className='flex items-center text-sm text-gray-700'
+                    className='flex items-center'
+                    style={{
+                      fontSize: '14px',
+                      color: '#0F0C1B99',
+                      cursor: 'pointer',
+                      fontWeight: '500',
+                      lineHeight: '20px',
+                    }}
                   >
                     <input
                       type='checkbox'
@@ -277,11 +307,12 @@ const WebsiteDetails: React.FC = () => {
             </div>
           </div>
 
+          <h3 className='font-semibold text-gray-700 mb-4 mt-12 detailhighfont'>
+            Create offer
+          </h3>
+
           {/* Create Offer Section with Tabs */}
-          <div>
-            <h3 className='text-lg font-semibold text-gray-700 mb-4'>
-              Create offer
-            </h3>
+          <div className='bg-white p-6 rounded-lg shadow-md space-y-8'>
             <div className='border-b border-gray-200'>
               <nav className='flex space-x-6'>
                 <button

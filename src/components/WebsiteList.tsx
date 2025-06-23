@@ -15,12 +15,13 @@ import { LuWalletMinimal } from 'react-icons/lu';
 import { FiShoppingBag } from 'react-icons/fi';
 import { LuUser } from 'react-icons/lu';
 import ReactCountryFlag from 'react-country-flag';
+import WebsiteHeader from './WebsiteHeader';
 
 const WebsiteList: React.FC = memo(() => {
   const dispatch = useDispatch();
   const websites = useSelector((state: RootState) => state.websites.websites);
   const [currentPage, setCurrentPage] = useState(1);
-  const [activeTab, setActiveTab] = useState('My websites');
+  // const [activeTab, setActiveTab] = useState('My websites');
   const itemsPerPage = 10;
 
   const navigate = useNavigate();
@@ -60,7 +61,7 @@ const WebsiteList: React.FC = memo(() => {
 
   return (
     <div className='container mx-auto pb-4'>
-      <div className='flex justify-between items-center mb-6 border-b'>
+      {/* <div className='flex justify-between items-center mb-6 border-b'>
         <div className='flex items-center'>
           <img
             src={logo}
@@ -173,7 +174,8 @@ const WebsiteList: React.FC = memo(() => {
             <PiNut style={{ fontSize: '24px', color: '#b1b1b1' }} />
           </span>
         </div>
-      </div>
+      </div> */}
+      <WebsiteHeader />
       <div className='flex justify-between mb-10'>
         <h2
           style={{

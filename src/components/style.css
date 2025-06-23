@@ -40,3 +40,15 @@
   font-weight: 600;
   border-color: #613fdd;
 }
+.detailhighfont {
+  font-size: 24px;
+  font-weight: 600;
+  color: #0f0c1b;
+  line-height: 40px;
+}
+.detailsmallfont {
+  font-size: 14px;
+  font-weight: 500;
+  color: #0f0c1b;
+  line-height: 20px;
+}
