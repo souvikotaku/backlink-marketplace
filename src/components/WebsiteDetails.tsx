@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form'; // Updated to include Controller
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useDispatch, useSelector } from 'react-redux';
@@ -7,6 +7,9 @@ import { addWebsite, updateWebsite } from '../store/websiteSlice';
 import { RootState } from '../store';
 import { useNavigate, useParams } from 'react-router-dom';
 import WebsiteHeader from './WebsiteHeader';
+import Select from 'react-select'; // Import react-select
+import { countries, languages } from 'countries-list'; // Import countries and languages data
+// Remove the dynamic import for FlagIcon, we'll use a helper function instead
 
 // Schema
 const formSchema = z.object({
@@ -16,12 +19,10 @@ const formSchema = z.object({
   category: z.array(z.string()).min(1, 'At least one category is required'),
   description: z.string().min(1, 'Description is required'),
   isOwner: z.boolean().optional(),
-
   guestPostPrice: z.number().nonnegative('Must be non-negative'),
   linkInsertionPrice: z.number().nonnegative('Must be non-negative'),
   homePagePrice: z.number().nonnegative('Must be non-negative'),
   homePageDescription: z.string().min(1, 'Description is required'),
-
   articleWordsMin: z.number().nonnegative('Must be non-negative'),
   articleWordsMax: z.number().nonnegative('Must be non-negative'),
   articleLinksMax: z.number().nonnegative('Must be non-negative'),
@@ -35,11 +36,11 @@ const WebsiteDetails: React.FC = () => {
   const { id } = useParams<{ id?: string }>();
   const websites = useSelector((state: RootState) => state.websites.websites);
   const websiteToEdit = id ? websites.find((w) => w.id === parseInt(id)) : null;
-  const savedData = localStorage.getItem('formData');
 
   const {
     register,
     handleSubmit,
+    control, // Added for react-select integration
     formState: { errors },
     reset,
     watch,
@@ -70,7 +71,6 @@ const WebsiteDetails: React.FC = () => {
     const savedData = localStorage.getItem('formData');
 
     if (id) {
-      // EDIT mode
       if (websiteToEdit) {
         reset({
           ...websiteToEdit,
@@ -82,12 +82,10 @@ const WebsiteDetails: React.FC = () => {
         });
       }
     } else {
-      // ADD mode
       if (savedData) {
         reset(JSON.parse(savedData));
       } else {
-        // Clear form if no saved data
-        reset(); // 🔧 this was missing!
+        reset();
       }
     }
   }, [websiteToEdit, reset, id]);
@@ -107,8 +105,8 @@ const WebsiteDetails: React.FC = () => {
     setValue('category', updated);
   };
 
-  const onSubmit = (data: any) => {
-    const websiteData = {
+  const onSubmit = (data: FormData) => {
+    const websiteData: any = {
       ...data,
       id: id ? parseInt(id) : Date.now(),
     };
@@ -119,9 +117,41 @@ const WebsiteDetails: React.FC = () => {
       dispatch(addWebsite(websiteData));
     }
 
-    localStorage.removeItem('formData'); // ✅ Clear formData after submit
-    navigate('/'); // Redirect back to list
+    localStorage.removeItem('formData');
+    navigate('/');
   };
+
+  // Helper to get flag image URL from country code
+  const getFlagUrl = (code: string) =>
+    `https://cdn.jsdelivr.net/npm/country-flag-icons/3x2/${code}.svg`;
+
+  // Prepare country list with flags
+  const countryOptions = Object.entries(countries).map(([code, country]) => ({
+    value: country.name,
+    label: (
+      <span>
+        <img
+          src={getFlagUrl(code)}
+          alt={code}
+          style={{
+            width: '20px',
+            marginRight: '8px',
+            display: 'inline-block',
+            verticalAlign: 'middle',
+          }}
+        />
+        {country.name}
+      </span>
+    ),
+    code, // Store code for flag import
+  }));
+
+  // Prepare language list
+  const languageList = Object.entries(languages).map(([code, language]) => ({
+    code,
+    name: language.name,
+  }));
+
   return (
     <div className='container mx-auto pb-4'>
       <WebsiteHeader />
@@ -130,19 +160,13 @@ const WebsiteDetails: React.FC = () => {
         <h2 className='text-2xl font-bold text-gray-900 mb-6'>
           {id ? 'Edit Website' : 'Add Website'}
         </h2>
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          // className='bg-white p-6 rounded-lg shadow-md space-y-8'
-        >
+        <form onSubmit={handleSubmit(onSubmit)}>
           <h3 className='font-semibold text-gray-700 mb-4 detailhighfont'>
             Website detail
           </h3>
-          {/* Website Details Section */}
           <div
             className='bg-white p-6 rounded-lg shadow-md space-y-8'
-            style={{
-              paddingRight: '10%',
-            }}
+            style={{ paddingRight: '10%' }}
           >
             <div className='grid grid-cols-4 gap-4'>
               {/* Website URL */}
@@ -170,8 +194,11 @@ const WebsiteDetails: React.FC = () => {
                   className='w-full p-2 border rounded-md'
                 >
                   <option value=''>Select Language</option>
-                  <option value='English'>🇺🇸 English</option>
-                  <option value='German'>🇩🇪 German</option>
+                  {languageList.map((lang) => (
+                    <option key={lang.code} value={lang.name}>
+                      {lang.name}
+                    </option>
+                  ))}
                 </select>
                 {errors.language && (
                   <p className='text-red-500 text-sm'>
@@ -185,14 +212,33 @@ const WebsiteDetails: React.FC = () => {
                 <label className='block mb-1 detailsmallfont'>
                   Your Majority of traffic comes from
                 </label>
-                <select
-                  {...register('country')}
-                  className='w-full p-2 border rounded-md'
-                >
-                  <option value=''>Select Country</option>
-                  <option value='United States'>🇺🇸 United States</option>
-                  <option value='Germany'>🇩🇪 Germany</option>
-                </select>
+                <Controller
+                  name='country'
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      {...field}
+                      options={countryOptions}
+                      placeholder='Select Country'
+                      onChange={(selectedOption) =>
+                        field.onChange(
+                          selectedOption ? selectedOption.value : ''
+                        )
+                      }
+                      value={countryOptions.find(
+                        (option) => option.value === field.value
+                      )}
+                      styles={{
+                        control: (provided) => ({
+                          ...provided,
+                          border: '1px solid #d1d5db',
+                          borderRadius: '0.375rem',
+                          padding: '2px',
+                        }),
+                      }}
+                    />
+                  )}
+                />
                 {errors.country && (
                   <p className='text-red-500 text-sm'>
                     {errors.country.message}
