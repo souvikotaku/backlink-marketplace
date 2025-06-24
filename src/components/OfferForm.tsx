@@ -144,16 +144,25 @@ const OfferForm: React.FC<OfferFormProps> = ({ websiteToEdit }) => {
       id: id ? parseInt(id) : Date.now(),
     };
 
-    if (id && websiteToEdit) {
-      dispatch(updateWebsite(websiteData));
-    } else {
-      dispatch(addWebsite(websiteData));
+    console.log('Website Data:', websiteData);
+    if (
+      websiteData?.category &&
+      websiteData?.category.length > 0 &&
+      websiteData?.url &&
+      websiteData?.country &&
+      websiteData?.language &&
+      websiteData?.description
+    ) {
+      if (id && websiteToEdit) {
+        dispatch(updateWebsite(websiteData));
+      } else {
+        dispatch(addWebsite(websiteData));
+      }
+      localStorage.removeItem('websiteDetailsFormData');
+      localStorage.removeItem('offerFormData');
+      localStorage.removeItem('articleSpecificationFormData');
+      navigate('/');
     }
-
-    localStorage.removeItem('websiteDetailsFormData');
-    localStorage.removeItem('offerFormData');
-    localStorage.removeItem('articleSpecificationFormData');
-    navigate('/');
   };
 
   return (

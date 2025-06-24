@@ -135,7 +135,7 @@ const ArticleSpecification: React.FC<ArticleSpecificationProps> = ({
                 value='true'
                 className='form-radio'
               />
-              <span className='ml-2 radiofont'>Yes</span>
+              <span className='ml-2 radiofontinside'>Yes</span>
             </label>
             <label className='inline-flex items-center'>
               <input
@@ -144,7 +144,7 @@ const ArticleSpecification: React.FC<ArticleSpecificationProps> = ({
                 value='false'
                 className='form-radio'
               />
-              <span className='ml-2 radiofont'>
+              <span className='ml-2 radiofontinside'>
                 No, the advertiser (client) needs to provide the content
               </span>
             </label>
@@ -217,7 +217,7 @@ const ArticleSpecification: React.FC<ArticleSpecificationProps> = ({
                     value='noTag'
                     className='form-radio'
                   />
-                  <span className='ml-2 radiofont'>
+                  <span className='ml-2 radiofontinside'>
                     We do not tag paid articles.
                   </span>
                 </label>
@@ -228,7 +228,7 @@ const ArticleSpecification: React.FC<ArticleSpecificationProps> = ({
                     value='onRequest'
                     className='form-radio'
                   />
-                  <span className='ml-2 radiofont'>
+                  <span className='ml-2 radiofontinside'>
                     Articles are tagged only at the advertiser's request.
                   </span>
                 </label>
@@ -239,7 +239,7 @@ const ArticleSpecification: React.FC<ArticleSpecificationProps> = ({
                     value='always'
                     className='form-radio'
                   />
-                  <span className='ml-2 radiofont'>
+                  <span className='ml-2 radiofontinside'>
                     We always tag articles: "Sponsored article".
                   </span>
                 </label>
@@ -258,7 +258,7 @@ const ArticleSpecification: React.FC<ArticleSpecificationProps> = ({
                     value='notLimited'
                     className='form-radio'
                   />
-                  <span className='ml-2 radiofont'>
+                  <span className='ml-2 radiofontinside'>
                     Length of the article is not limited.
                   </span>
                 </label>
@@ -269,7 +269,7 @@ const ArticleSpecification: React.FC<ArticleSpecificationProps> = ({
                     value='clientProvided'
                     className='form-radio'
                   />
-                  <span className='ml-2 radiofont'>
+                  <span className='ml-2 radiofontinside'>
                     No, the advertiser (client) needs to provide the content
                   </span>
                 </label>
@@ -399,7 +399,7 @@ const ArticleSpecification: React.FC<ArticleSpecificationProps> = ({
                     value='noTag'
                     className='form-radio'
                   />
-                  <span className='ml-2 radiofont'>
+                  <span className='ml-2 radiofontinside'>
                     We do not tag paid articles.
                   </span>
                 </label>
@@ -410,7 +410,7 @@ const ArticleSpecification: React.FC<ArticleSpecificationProps> = ({
                     value='maxLinks'
                     className='form-radio'
                   />
-                  <span className='ml-2 radiofont'>
+                  <span className='ml-2 radiofontinside'>
                     A maximum number of links to the advertiser:
                   </span>
                 </label>
@@ -455,7 +455,7 @@ const ArticleSpecification: React.FC<ArticleSpecificationProps> = ({
                     value='true'
                     className='form-radio'
                   />
-                  <span className='ml-2 radiofont'>Yes</span>
+                  <span className='ml-2 radiofontinside'>Yes</span>
                 </label>
                 <label className='inline-flex items-center'>
                   <input
@@ -464,7 +464,7 @@ const ArticleSpecification: React.FC<ArticleSpecificationProps> = ({
                     value='false'
                     className='form-radio'
                   />
-                  <span className='ml-2 radiofont'>No</span>
+                  <span className='ml-2 radiofontinside'>No</span>
                 </label>
               </div>
             </div>
@@ -481,7 +481,7 @@ const ArticleSpecification: React.FC<ArticleSpecificationProps> = ({
                     value='true'
                     className='form-radio'
                   />
-                  <span className='ml-2 radiofont'>
+                  <span className='ml-2 radiofontinside'>
                     We allow links to other websites in the content of the
                     article.
                   </span>
@@ -493,7 +493,7 @@ const ArticleSpecification: React.FC<ArticleSpecificationProps> = ({
                     value='false'
                     className='form-radio'
                   />
-                  <span className='ml-2 radiofont'>
+                  <span className='ml-2 radiofontinside'>
                     We DO NOT allow links to other websites in the content of
                     the article.
                   </span>
@@ -513,7 +513,7 @@ const ArticleSpecification: React.FC<ArticleSpecificationProps> = ({
                     value='brandOnly'
                     className='form-radio'
                   />
-                  <span className='ml-2 radiofont'>
+                  <span className='ml-2 radiofontinside'>
                     Only brand links, URL, navigational, graphic links.
                   </span>
                 </label>
@@ -524,7 +524,7 @@ const ArticleSpecification: React.FC<ArticleSpecificationProps> = ({
                     value='brandedGeneric'
                     className='form-radio'
                   />
-                  <span className='ml-2 radiofont'>
+                  <span className='ml-2 radiofontinside'>
                     Only branded and generic links.
                   </span>
                 </label>
@@ -535,7 +535,7 @@ const ArticleSpecification: React.FC<ArticleSpecificationProps> = ({
                     value='mixed'
                     className='form-radio'
                   />
-                  <span className='ml-2 radiofont'>
+                  <span className='ml-2 radiofontinside'>
                     Also mixed links (partly exact match anchors).
                   </span>
                 </label>
@@ -546,7 +546,7 @@ const ArticleSpecification: React.FC<ArticleSpecificationProps> = ({
                     value='all'
                     className='form-radio'
                   />
-                  <span className='ml-2 radiofont'>
+                  <span className='ml-2 radiofontinside'>
                     All links, including exact match anchors.
                   </span>
                 </label>

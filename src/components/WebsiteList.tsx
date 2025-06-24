@@ -11,9 +11,7 @@ import { GiHeartPlus } from 'react-icons/gi';
 import { BsIncognito } from 'react-icons/bs';
 import { PiFlowerLotus, PiNut } from 'react-icons/pi';
 import logo from '../assets/logo.png';
-import { LuWalletMinimal } from 'react-icons/lu';
-import { FiShoppingBag } from 'react-icons/fi';
-import { LuUser } from 'react-icons/lu';
+
 import ReactCountryFlag from 'react-country-flag';
 import WebsiteHeader from './WebsiteHeader';
 import { countries } from 'countries-list'; // Import countries-list for mapping

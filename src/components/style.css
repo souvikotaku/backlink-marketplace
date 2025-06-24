@@ -58,3 +58,16 @@
   color: #0f0c1b;
   line-height: 20px;
 }
+.radiofontinside {
+  font-size: 14px;
+  font-weight: 400;
+  color: #0f0c1b99;
+  line-height: 20px;
+}
+.labelbuttonfont {
+  font-size: 13px;
+  font-weight: 500;
+  color: #0f0c1b;
+  line-height: 18.29px;
+  border-radius: 45px;
+}
