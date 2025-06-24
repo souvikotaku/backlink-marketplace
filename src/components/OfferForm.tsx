@@ -45,7 +45,7 @@ const OfferForm: React.FC<OfferFormProps> = ({ websiteToEdit }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { id } = useParams<{ id?: string }>();
-  const websites = useSelector((state: RootState) => state.websites.websites);
+  //   const websites = useSelector((state: RootState) => state.websites.websites);
 
   const {
     register,
@@ -133,8 +133,13 @@ const OfferForm: React.FC<OfferFormProps> = ({ websiteToEdit }) => {
     const websiteDetails = JSON.parse(
       localStorage.getItem('websiteDetailsFormData') || '{}'
     );
+
+    const articleDetails = JSON.parse(
+      localStorage.getItem('articleSpecificationFormData') || '{}'
+    );
     const websiteData: any = {
       ...websiteDetails,
+      ...articleDetails,
       ...data,
       id: id ? parseInt(id) : Date.now(),
     };
@@ -147,6 +152,7 @@ const OfferForm: React.FC<OfferFormProps> = ({ websiteToEdit }) => {
 
     localStorage.removeItem('websiteDetailsFormData');
     localStorage.removeItem('offerFormData');
+    localStorage.removeItem('articleSpecificationFormData');
     navigate('/');
   };
 

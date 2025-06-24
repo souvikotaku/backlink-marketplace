@@ -16,6 +16,16 @@ interface Website {
   articleWordsMin?: number;
   articleWordsMax?: number;
   articleLinksMax?: number;
+  isWritingIncluded?: boolean;
+  articleLengthOption?: string;
+  allowDofollow?: boolean;
+  linkType?: string;
+  taggingPolicy?: string;
+  advertiserLinksOption?: string;
+  advertiserLinksMin?: number;
+  advertiserLinksMax?: number;
+  otherLinks?: boolean;
+  articleDescription?: string;
 }
 
 const initialState: { websites: Website[] } = {
@@ -36,6 +46,16 @@ const initialState: { websites: Website[] } = {
       articleWordsMin: 0,
       articleWordsMax: 0,
       articleLinksMax: 0,
+      isWritingIncluded: true,
+      articleLengthOption: 'notLimited',
+      allowDofollow: false,
+      linkType: 'brandOnly',
+      taggingPolicy: 'noTag',
+      advertiserLinksOption: 'noTag',
+      advertiserLinksMin: undefined,
+      advertiserLinksMax: undefined,
+      otherLinks: false,
+      articleDescription: '',
     },
     {
       id: 2,
@@ -53,98 +73,17 @@ const initialState: { websites: Website[] } = {
       articleWordsMin: 0,
       articleWordsMax: 0,
       articleLinksMax: 0,
+      isWritingIncluded: true,
+      articleLengthOption: 'notLimited',
+      allowDofollow: false,
+      linkType: 'brandOnly',
+      taggingPolicy: 'noTag',
+      advertiserLinksOption: 'noTag',
+      advertiserLinksMin: undefined,
+      advertiserLinksMax: undefined,
+      otherLinks: false,
+      articleDescription: 'abc',
     },
-    // {
-    //   id: 3,
-    //   url: 'https://example.com',
-    //   country: 'United States',
-    //   language: 'English',
-    //   category: 'Computer & Electronics',
-    // },
-    // {
-    //   id: 4,
-    //   url: 'https://example.de',
-    //   country: 'Germany',
-    //   language: 'German',
-    //   category: 'Entertainment',
-    // },
-    // {
-    //   id: 5,
-    //   url: 'https://example.com',
-    //   country: 'United States',
-    //   language: 'English',
-    //   category: 'Computer & Electronics',
-    // },
-    // {
-    //   id: 6,
-    //   url: 'https://example.de',
-    //   country: 'Germany',
-    //   language: 'German',
-    //   category: 'Entertainment',
-    // },
-    // {
-    //   id: 7,
-    //   url: 'https://example.com',
-    //   country: 'United States',
-    //   language: 'English',
-    //   category: 'Computer & Electronics',
-    // },
-    // {
-    //   id: 8,
-    //   url: 'https://example.de',
-    //   country: 'Germany',
-    //   language: 'German',
-    //   category: 'Entertainment',
-    // },
-    // {
-    //   id: 9,
-    //   url: 'https://example.com',
-    //   country: 'United States',
-    //   language: 'English',
-    //   category: 'Computer & Electronics',
-    // },
-    // {
-    //   id: 10,
-    //   url: 'https://example.de',
-    //   country: 'Germany',
-    //   language: 'German',
-    //   category: 'Entertainment',
-    // },
-    // {
-    //   id: 11,
-    //   url: 'https://example.com',
-    //   country: 'United States',
-    //   language: 'English',
-    //   category: 'Computer & Electronics',
-    // },
-    // {
-    //   id: 12,
-    //   url: 'https://example.de',
-    //   country: 'Germany',
-    //   language: 'German',
-    //   category: 'Entertainment',
-    // },
-    // {
-    //   id: 13,
-    //   url: 'https://example.com',
-    //   country: 'United States',
-    //   language: 'English',
-    //   category: 'Computer & Electronics',
-    // },
-    // {
-    //   id: 14,
-    //   url: 'https://example.de',
-    //   country: 'Germany',
-    //   language: 'German',
-    //   category: 'Entertainment',
-    // },
-    // {
-    //   id: 15,
-    //   url: 'https://example.com',
-    //   country: 'United States',
-    //   language: 'English',
-    //   category: 'Computer & Electronics',
-    // },
   ],
 };
 
