@@ -11,7 +11,7 @@ const WebsiteHeader = () => {
   const navigate = useNavigate();
 
   return (
-    <div className='flex justify-between items-center mb-6 border-b'>
+    <div className='flex justify-between items-center mb-6 border-b pl-6 pr-6'>
       <div className='flex items-center'>
         <img
           src={logo}

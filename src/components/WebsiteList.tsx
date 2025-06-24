@@ -58,200 +58,203 @@ const WebsiteList: React.FC = memo(() => {
   ];
 
   return (
-    <div className='container mx-auto pb-4'>
+    <div className='container mx-auto pb-4 '>
       <WebsiteHeader />
-      <div className='flex justify-between mb-10'>
-        <h2
-          style={{
-            fontSize: 24,
-            fontWeight: 600,
-            color: '#0F0C1B',
-            lineHeight: '40px',
-          }}
-        >
-          All websites
-        </h2>
-      </div>
-      <div className='flex justify-between mb-3'>
-        <button
-          className='bg-purple-600 text-white px-4 rounded-lg'
-          onClick={handleAddWebsite}
-          style={{ height: 36, width: 228, backgroundColor: '#613FDD' }}
-        >
-          + Add Website
-        </button>
-      </div>
-      <div className='bg-white rounded-lg'>
-        <table className='w-full'>
-          <thead>
-            <tr style={{ backgroundColor: '#faf7fe' }}>
-              <th className='p-3 text-left headerstyle'>Website</th>
-              <th className='p-3 text-left headerstyle'>Country</th>
-              <th className='p-3 text-left headerstyle'>Language</th>
-              <th className='p-3 text-left headerstyle'>Category</th>
-              <th className='p-3 text-left headerstyle'>Other categories</th>
-              <th className='p-3 text-left headerstyle'>Grey niches</th>
-            </tr>
-          </thead>
-          <tbody>
-            {currentWebsites.map((website, index) => {
-              let displayCategories: string[] | any;
-              let allCategories: string;
-              let originalLength: number;
-              if (Array.isArray(website.category)) {
-                originalLength = website.category.length;
-                displayCategories = website.category.slice(0, 2);
-                allCategories = website.category.join(', ');
-              } else if (typeof website.category === 'string') {
-                displayCategories = [website.category];
-                allCategories = website.category;
-                originalLength = 1;
-              } else {
-                displayCategories = [''];
-                allCategories = '';
-                originalLength = 0;
-              }
-
-              return (
-                <tr
-                  key={website.id}
-                  className={`hover:bg-gray-50 cursor-pointer ${
-                    index === 0
-                      ? 'bg-white'
-                      : index % 2 === 0
-                      ? 'bg-white'
-                      : 'bg-[#faf7fe]'
-                  }`}
-                  onClick={() => navigate(`/edit/${website.id}`)}
-                >
-                  <td className='p-3 tablecontent'>
-                    {website.url?.replace(/^https?:\/\//, '')}
-                  </td>
-                  <td className='p-3 tablecontent'>
-                    <ReactCountryFlag
-                      countryCode={getCountryCode(website.country)}
-                      svg
-                      style={{
-                        width: '1.5em',
-                        height: '1.5em',
-                        marginRight: '0.5em',
-                        verticalAlign: 'middle', // Ensure proper alignment
-                      }}
-                      title={website.country}
-                    />
-                    {website.country}
-                  </td>
-                  <td className='p-3 tablecontent'>{website.language}</td>
-                  <td className='p-3 tablecontent' style={{ width: '20%' }}>
-                    <span title={allCategories}>
-                      {displayCategories.join(', ')}
-                      {originalLength > 2 && ' ...'}
-                    </span>
-                  </td>
-                  <td className='p-3 tablecontent'>{'Entertainment'}</td>
-                  <td className='p-3 flex space-x-2'>
-                    {nicheIcons.map((icon, idx) => (
-                      <span
-                        key={idx}
-                        style={{ color: '#613FDD', fontWeight: 600 }}
-                      >
-                        {icon}
-                      </span>
-                    ))}
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
-      <div className='flex justify-center mt-6'>
-        <button
-          onClick={() => paginate(currentPage - 1)}
-          disabled={currentPage === 1}
-          className='px-4 py-2 text-gray-600 hover:text-gray-800 disabled:opacity-50 paginationprevious'
-        >
-          <span
+      <div className='maincontainer'>
+        {' '}
+        <div className='flex justify-between mb-10 '>
+          <h2
             style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '4px',
-              fontSize: '14px',
-              fontWeight: '500',
-              lineHeight: '20px',
+              fontSize: 24,
+              fontWeight: 600,
+              color: '#0F0C1B',
+              lineHeight: '40px',
             }}
           >
-            <FaArrowLeft style={{ marginRight: '10px' }} />
-            Previous
-          </span>
-        </button>
-        <div className='flex paginationfont'>
-          {currentPage > 2 && (
-            <button
-              onClick={() => paginate(1)}
-              className='px-4 py-2 text-gray-600 hover:text-gray-800'
-              style={{ border: '#EAEAEA 2px solid' }}
-            >
-              1
-            </button>
-          )}
-          {currentPage > 2 && <span className='px-4 py-2'>...</span>}
-          {currentPage > 1 && (
-            <button
-              onClick={() => paginate(currentPage - 1)}
-              className='px-4 py-2 text-gray-600 hover:text-gray-800'
-              style={{ border: '#EAEAEA 2px solid' }}
-            >
-              {currentPage - 1}
-            </button>
-          )}
-          <button
-            className='px-4 py-2 text-black'
-            style={{ backgroundColor: '#EAEAEA' }}
-          >
-            {currentPage}
-          </button>
-          {currentPage < totalPages && (
-            <button
-              onClick={() => paginate(currentPage + 1)}
-              className='px-4 py-2 text-gray-600 hover:text-gray-800'
-              style={{ border: '#EAEAEA 2px solid' }}
-            >
-              {currentPage + 1}
-            </button>
-          )}
-          {currentPage < totalPages - 2 && (
-            <span className='px-4 py-2'>...</span>
-          )}
-          {currentPage < totalPages - 1 && (
-            <button
-              onClick={() => paginate(totalPages)}
-              className='px-4 py-2 text-gray-600 hover:text-gray-800'
-              style={{ border: '#EAEAEA 2px solid' }}
-            >
-              {totalPages}
-            </button>
-          )}
+            All websites
+          </h2>
         </div>
-        <button
-          onClick={() => paginate(currentPage + 1)}
-          disabled={currentPage === totalPages}
-          className='px-4 py-2 text-gray-600 hover:text-gray-800 disabled:opacity-50 paginationnext'
-        >
-          <span
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '4px',
-              fontSize: '14px',
-              fontWeight: '500',
-              lineHeight: '20px',
-            }}
+        <div className='flex justify-between mb-3'>
+          <button
+            className='bg-purple-600 text-white px-4 rounded-lg'
+            onClick={handleAddWebsite}
+            style={{ height: 36, width: 228, backgroundColor: '#613FDD' }}
           >
-            Next
-            <FaArrowRight style={{ marginLeft: '10px' }} />
-          </span>
-        </button>
+            + Add Website
+          </button>
+        </div>
+        <div className='bg-white rounded-lg'>
+          <table className='w-full'>
+            <thead>
+              <tr style={{ backgroundColor: '#faf7fe' }}>
+                <th className='p-3 text-left headerstyle'>Website</th>
+                <th className='p-3 text-left headerstyle'>Country</th>
+                <th className='p-3 text-left headerstyle'>Language</th>
+                <th className='p-3 text-left headerstyle'>Category</th>
+                <th className='p-3 text-left headerstyle'>Other categories</th>
+                <th className='p-3 text-left headerstyle'>Grey niches</th>
+              </tr>
+            </thead>
+            <tbody>
+              {currentWebsites.map((website, index) => {
+                let displayCategories: string[] | any;
+                let allCategories: string;
+                let originalLength: number;
+                if (Array.isArray(website.category)) {
+                  originalLength = website.category.length;
+                  displayCategories = website.category.slice(0, 2);
+                  allCategories = website.category.join(', ');
+                } else if (typeof website.category === 'string') {
+                  displayCategories = [website.category];
+                  allCategories = website.category;
+                  originalLength = 1;
+                } else {
+                  displayCategories = [''];
+                  allCategories = '';
+                  originalLength = 0;
+                }
+
+                return (
+                  <tr
+                    key={website.id}
+                    className={`hover:bg-gray-50 cursor-pointer ${
+                      index === 0
+                        ? 'bg-white'
+                        : index % 2 === 0
+                        ? 'bg-white'
+                        : 'bg-[#faf7fe]'
+                    }`}
+                    onClick={() => navigate(`/edit/${website.id}`)}
+                  >
+                    <td className='p-3 tablecontent'>
+                      {website.url?.replace(/^https?:\/\//, '')}
+                    </td>
+                    <td className='p-3 tablecontent'>
+                      <ReactCountryFlag
+                        countryCode={getCountryCode(website.country)}
+                        svg
+                        style={{
+                          width: '1.5em',
+                          height: '1.5em',
+                          marginRight: '0.5em',
+                          verticalAlign: 'middle', // Ensure proper alignment
+                        }}
+                        title={website.country}
+                      />
+                      {website.country}
+                    </td>
+                    <td className='p-3 tablecontent'>{website.language}</td>
+                    <td className='p-3 tablecontent' style={{ width: '20%' }}>
+                      <span title={allCategories}>
+                        {displayCategories.join(', ')}
+                        {originalLength > 2 && ' ...'}
+                      </span>
+                    </td>
+                    <td className='p-3 tablecontent'>{'Entertainment'}</td>
+                    <td className='p-3 flex space-x-2'>
+                      {nicheIcons.map((icon, idx) => (
+                        <span
+                          key={idx}
+                          style={{ color: '#613FDD', fontWeight: 600 }}
+                        >
+                          {icon}
+                        </span>
+                      ))}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+        <div className='flex justify-center mt-6'>
+          <button
+            onClick={() => paginate(currentPage - 1)}
+            disabled={currentPage === 1}
+            className='px-4 py-2 text-gray-600 hover:text-gray-800 disabled:opacity-50 paginationprevious'
+          >
+            <span
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '4px',
+                fontSize: '14px',
+                fontWeight: '500',
+                lineHeight: '20px',
+              }}
+            >
+              <FaArrowLeft style={{ marginRight: '10px' }} />
+              Previous
+            </span>
+          </button>
+          <div className='flex paginationfont'>
+            {currentPage > 2 && (
+              <button
+                onClick={() => paginate(1)}
+                className='px-4 py-2 text-gray-600 hover:text-gray-800'
+                style={{ border: '#EAEAEA 2px solid' }}
+              >
+                1
+              </button>
+            )}
+            {currentPage > 2 && <span className='px-4 py-2'>...</span>}
+            {currentPage > 1 && (
+              <button
+                onClick={() => paginate(currentPage - 1)}
+                className='px-4 py-2 text-gray-600 hover:text-gray-800'
+                style={{ border: '#EAEAEA 2px solid' }}
+              >
+                {currentPage - 1}
+              </button>
+            )}
+            <button
+              className='px-4 py-2 text-black'
+              style={{ backgroundColor: '#EAEAEA' }}
+            >
+              {currentPage}
+            </button>
+            {currentPage < totalPages && (
+              <button
+                onClick={() => paginate(currentPage + 1)}
+                className='px-4 py-2 text-gray-600 hover:text-gray-800'
+                style={{ border: '#EAEAEA 2px solid' }}
+              >
+                {currentPage + 1}
+              </button>
+            )}
+            {currentPage < totalPages - 2 && (
+              <span className='px-4 py-2'>...</span>
+            )}
+            {currentPage < totalPages - 1 && (
+              <button
+                onClick={() => paginate(totalPages)}
+                className='px-4 py-2 text-gray-600 hover:text-gray-800'
+                style={{ border: '#EAEAEA 2px solid' }}
+              >
+                {totalPages}
+              </button>
+            )}
+          </div>
+          <button
+            onClick={() => paginate(currentPage + 1)}
+            disabled={currentPage === totalPages}
+            className='px-4 py-2 text-gray-600 hover:text-gray-800 disabled:opacity-50 paginationnext'
+          >
+            <span
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '4px',
+                fontSize: '14px',
+                fontWeight: '500',
+                lineHeight: '20px',
+              }}
+            >
+              Next
+              <FaArrowRight style={{ marginLeft: '10px' }} />
+            </span>
+          </button>
+        </div>
       </div>
     </div>
   );
