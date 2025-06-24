@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useForm, Controller } from 'react-hook-form'; // Updated to include Controller
+import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useDispatch, useSelector } from 'react-redux';
@@ -7,8 +7,8 @@ import { addWebsite, updateWebsite } from '../store/websiteSlice';
 import { RootState } from '../store';
 import { useNavigate, useParams } from 'react-router-dom';
 import WebsiteHeader from './WebsiteHeader';
-import Select from 'react-select'; // Import react-select
-import { countries, languages } from 'countries-list'; // Import countries and languages data
+import Select from 'react-select';
+import { countries, languages } from 'countries-list';
 
 // Schema
 const formSchema = z.object({
@@ -21,13 +21,12 @@ const formSchema = z.object({
   guestPostPrice1: z.number().nonnegative('Must be non-negative'),
   linkInsertionPrice1: z.number().nonnegative('Must be non-negative'),
   homePagePrice: z.number().nonnegative('Must be non-negative'),
-  homePageDescription: z.string().min(1, 'Description is required'),
+  homePageDescription: z.string().optional(), // Changed to optional
   articleWordsMin: z.number().nonnegative('Must be non-negative'),
   articleWordsMax: z.number().nonnegative('Must be non-negative'),
   articleLinksMax: z.number().nonnegative('Must be non-negative'),
   samePriceForAllNiches: z.boolean().optional(),
   greyNichePrice: z.number().nonnegative('Must be non-negative').optional(),
-  // Add nested objects for guestPostPrice and linkInsertionPrice for grey niches
   guestPostPrice: z.union([
     z.number().nonnegative('Must be non-negative'),
     z.object({
@@ -57,7 +56,7 @@ const WebsiteDetails: React.FC = () => {
   const {
     register,
     handleSubmit,
-    control, // Added for react-select integration
+    control,
     formState: { errors },
     reset,
     watch,
@@ -73,14 +72,23 @@ const WebsiteDetails: React.FC = () => {
       isOwner: false,
       guestPostPrice1: 0,
       linkInsertionPrice1: 0,
-      guestPostPrice: 0,
-      linkInsertionPrice: 0,
+      guestPostPrice: {
+        Gambling: 0,
+        Crypto: 0,
+        Adult: 0,
+      },
+      linkInsertionPrice: {
+        Gambling: 0,
+        Crypto: 0,
+        Adult: 0,
+      },
       homePagePrice: 0,
       homePageDescription: '',
       articleWordsMin: 0,
       articleWordsMax: 0,
       articleLinksMax: 0,
       samePriceForAllNiches: false,
+      greyNichePrice: 0,
     },
   });
 
@@ -141,11 +149,9 @@ const WebsiteDetails: React.FC = () => {
     navigate('/');
   };
 
-  // Helper to get flag image URL from country code
   const getFlagUrl = (code: string) =>
     `https://cdn.jsdelivr.net/npm/country-flag-icons/3x2/${code}.svg`;
 
-  // Prepare country list with flags
   const countryOptions = Object.entries(countries).map(([code, country]) => ({
     value: country.name,
     label: (
@@ -163,10 +169,9 @@ const WebsiteDetails: React.FC = () => {
         {country.name}
       </span>
     ),
-    code, // Store code for flag import
+    code,
   }));
 
-  // Prepare language list
   const languageList = Object.entries(languages).map(([code, language]) => ({
     code,
     name: language.name,
@@ -175,7 +180,6 @@ const WebsiteDetails: React.FC = () => {
   return (
     <div className='container mx-auto pb-4'>
       <WebsiteHeader />
-
       <div className='max-w-6xl mx-auto'>
         <h2 className='text-2xl font-bold text-gray-900 mb-6'>
           {id ? 'Edit Website' : 'Add Website'}
@@ -189,7 +193,6 @@ const WebsiteDetails: React.FC = () => {
             style={{ paddingRight: '10%' }}
           >
             <div className='grid grid-cols-4 gap-4'>
-              {/* Website URL */}
               <div>
                 <label className='block mb-1 detailsmallfont'>
                   Enter Website
@@ -203,8 +206,6 @@ const WebsiteDetails: React.FC = () => {
                   <p className='text-red-500 text-sm'>{errors.url.message}</p>
                 )}
               </div>
-
-              {/* Language */}
               <div>
                 <label className='block mb-1 detailsmallfont'>
                   Website's Primary language
@@ -226,8 +227,6 @@ const WebsiteDetails: React.FC = () => {
                   </p>
                 )}
               </div>
-
-              {/* Traffic Country */}
               <div>
                 <label className='block mb-1 detailsmallfont'>
                   Your Majority of traffic comes from
@@ -266,8 +265,6 @@ const WebsiteDetails: React.FC = () => {
                 )}
               </div>
             </div>
-
-            {/* Category Grid */}
             <div className='mt-6'>
               <label className='block mb-2 detailsmallfont'>
                 Main Category
@@ -340,8 +337,6 @@ const WebsiteDetails: React.FC = () => {
                 </p>
               )}
             </div>
-
-            {/* Description */}
             <div className='mt-4'>
               <label className='block text-sm font-medium mb-1'>
                 Description of Website
@@ -357,8 +352,6 @@ const WebsiteDetails: React.FC = () => {
                 </p>
               )}
             </div>
-
-            {/* Owner Checkbox */}
             <div className='mt-4'>
               <label className='inline-flex items-center'>
                 <input
@@ -372,12 +365,9 @@ const WebsiteDetails: React.FC = () => {
               </label>
             </div>
           </div>
-
           <h3 className='font-semibold text-gray-700 mb-4 mt-12 detailhighfont'>
             Create offer
           </h3>
-
-          {/* Create Offer Section with Tabs */}
           <div className='bg-white p-6 rounded-lg shadow-md space-y-8'>
             <div className='border-b border-gray-200'>
               <nav className='flex space-x-6'>
@@ -392,7 +382,6 @@ const WebsiteDetails: React.FC = () => {
                 >
                   Normal offer
                 </button>
-
                 <button
                   type='button'
                   onClick={() => setActiveTab('articleSpecs')}
@@ -417,8 +406,6 @@ const WebsiteDetails: React.FC = () => {
                 </button>
               </nav>
             </div>
-
-            {/* Tab Content */}
             <div className='mt-6'>
               {activeTab === 'normalOffers' && (
                 <div>
@@ -555,23 +542,6 @@ const WebsiteDetails: React.FC = () => {
                               placeholder='Enter price'
                               disabled={watch('samePriceForAllNiches')}
                             />
-                            {typeof errors.guestPostPrice === 'object' &&
-                              errors.guestPostPrice !== null &&
-                              'message' in errors.guestPostPrice === false &&
-                              (errors.guestPostPrice as Record<string, any>)[
-                                niche
-                              ]?.message && (
-                                <p className='text-red-500 text-sm'>
-                                  {
-                                    (
-                                      errors.guestPostPrice as Record<
-                                        string,
-                                        any
-                                      >
-                                    )[niche]?.message
-                                  }
-                                </p>
-                              )}
                           </div>
                           <div>
                             <label className='block text-xs font-medium mb-1'>
@@ -589,24 +559,6 @@ const WebsiteDetails: React.FC = () => {
                               placeholder='Enter price'
                               disabled={watch('samePriceForAllNiches')}
                             />
-                            {typeof errors.linkInsertionPrice === 'object' &&
-                              errors.linkInsertionPrice !== null &&
-                              'message' in errors.linkInsertionPrice ===
-                                false &&
-                              (
-                                errors.linkInsertionPrice as Record<string, any>
-                              )[niche]?.message && (
-                                <p className='text-red-500 text-sm'>
-                                  {
-                                    (
-                                      errors.linkInsertionPrice as Record<
-                                        string,
-                                        any
-                                      >
-                                    )[niche]?.message
-                                  }
-                                </p>
-                              )}
                           </div>
                         </div>
                       </div>
@@ -616,8 +568,6 @@ const WebsiteDetails: React.FC = () => {
               )}
             </div>
           </div>
-
-          {/* Submit */}
           <button
             type='submit'
             className='bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700'
