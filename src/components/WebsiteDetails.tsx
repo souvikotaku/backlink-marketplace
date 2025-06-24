@@ -522,7 +522,7 @@ const WebsiteDetails: React.FC = () => {
                       </div>
                     </div>
                   )}
-                  <div className='grid grid-cols-3 gap-4'>
+                  <div className='grid grid-cols-4 gap-4'>
                     {(['Gambling', 'Crypto', 'Adult'] as const).map((niche) => (
                       <div key={niche}>
                         <label className='block text-sm font-medium mb-1'>
