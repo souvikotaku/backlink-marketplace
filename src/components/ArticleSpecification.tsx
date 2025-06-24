@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
+import './style.css';
 
 const articleSpecificationSchema = z.object({
   isWritingIncluded: z.boolean(),
@@ -117,17 +118,16 @@ const ArticleSpecification: React.FC<ArticleSpecificationProps> = ({
   };
 
   return (
-    <form
-      onSubmit={handleSubmit(onFormSubmit)}
-      className='mt-6 p-4 border rounded-lg shadow-sm bg-white'
-    >
-      <h3 className='text-xl font-semibold mb-4'>Article Specification</h3>
-      <div className='space-y-6'>
+    <form onSubmit={handleSubmit(onFormSubmit)}>
+      <h3 className='font-semibold text-gray-700 mb-4 mt-12 detailhighfont'>
+        Article Specification
+      </h3>
+      <div className='bg-white p-6 rounded-lg shadow-md grid grid-cols-2 gap-6'>
         <div>
-          <label className='block text-sm font-medium text-gray-700'>
+          <label className='block text-sm font-medium mb-1'>
             Is writing of an article included in the offer?
           </label>
-          <div className='mt-2 space-y-2'>
+          <div className='mt-2 space-y-2 grid'>
             <label className='inline-flex items-center'>
               <input
                 type='radio'
@@ -135,7 +135,7 @@ const ArticleSpecification: React.FC<ArticleSpecificationProps> = ({
                 value='true'
                 className='form-radio'
               />
-              <span className='ml-2'>Yes</span>
+              <span className='ml-2 radiofont'>Yes</span>
             </label>
             <label className='inline-flex items-center'>
               <input
@@ -144,7 +144,7 @@ const ArticleSpecification: React.FC<ArticleSpecificationProps> = ({
                 value='false'
                 className='form-radio'
               />
-              <span className='ml-2'>
+              <span className='ml-2 radiofont'>
                 No, the advertiser (client) needs to provide the content
               </span>
             </label>
@@ -152,8 +152,8 @@ const ArticleSpecification: React.FC<ArticleSpecificationProps> = ({
         </div>
 
         {isWritingIncluded && (
-          <div className='space-y-6'>
-            <div>
+          <>
+            {/* <div>
               <label className='block text-sm font-medium text-gray-700'>
                 Number of words in the article
               </label>
@@ -203,35 +203,102 @@ const ArticleSpecification: React.FC<ArticleSpecificationProps> = ({
                   </p>
                 )}
               </div>
-            </div>
+            </div> */}
 
             <div>
-              <label className='block text-sm font-medium text-gray-700'>
-                Allow DOFOLLOW links in the article
+              <label className='block text-sm font-medium mb-1'>
+                Tagging articles policy:
               </label>
-              <div className='mt-2 space-y-2'>
+              <div className='mt-2 space-y-2 grid'>
                 <label className='inline-flex items-center'>
                   <input
                     type='radio'
-                    {...register('allowDofollow')}
-                    value='true'
+                    {...register('taggingPolicy')}
+                    value='noTag'
                     className='form-radio'
                   />
-                  <span className='ml-2'>Yes</span>
+                  <span className='ml-2 radiofont'>
+                    We do not tag paid articles.
+                  </span>
                 </label>
                 <label className='inline-flex items-center'>
                   <input
                     type='radio'
-                    {...register('allowDofollow')}
-                    value='false'
+                    {...register('taggingPolicy')}
+                    value='onRequest'
                     className='form-radio'
                   />
-                  <span className='ml-2'>No</span>
+                  <span className='ml-2 radiofont'>
+                    Articles are tagged only at the advertiser's request.
+                  </span>
+                </label>
+                <label className='inline-flex items-center'>
+                  <input
+                    type='radio'
+                    {...register('taggingPolicy')}
+                    value='always'
+                    className='form-radio'
+                  />
+                  <span className='ml-2 radiofont'>
+                    We always tag articles: "Sponsored article".
+                  </span>
                 </label>
               </div>
             </div>
 
             <div>
+              <label className='block text-sm font-medium mb-1'>
+                Number of words in the article
+              </label>
+              <div className='mt-2 space-y-2'>
+                <label className='inline-flex items-center'>
+                  <input
+                    type='radio'
+                    {...register('articleLengthOption')}
+                    value='notLimited'
+                    className='form-radio'
+                  />
+                  <span className='ml-2 radiofont'>
+                    Length of the article is not limited.
+                  </span>
+                </label>
+                <label className='inline-flex items-center'>
+                  <input
+                    type='radio'
+                    {...register('articleLengthOption')}
+                    value='clientProvided'
+                    className='form-radio'
+                  />
+                  <span className='ml-2 radiofont'>
+                    No, the advertiser (client) needs to provide the content
+                  </span>
+                </label>
+                {articleLengthOption === 'clientProvided' && (
+                  <div className='mt-2 flex space-x-4'>
+                    <input
+                      type='number'
+                      {...register('articleWordsMin', { valueAsNumber: true })}
+                      placeholder='Min'
+                      className='w-24 p-2 border rounded'
+                    />
+                    <input
+                      type='number'
+                      {...register('articleWordsMax', { valueAsNumber: true })}
+                      placeholder='Max'
+                      className='w-24 p-2 border rounded'
+                    />
+                  </div>
+                )}
+                {(errors.articleWordsMin || errors.articleWordsMax) && (
+                  <p className='text-red-500 text-sm'>
+                    {errors.articleWordsMin?.message ||
+                      errors.articleWordsMax?.message}
+                  </p>
+                )}
+              </div>
+            </div>
+
+            {/* <div>
               <label className='block text-sm font-medium text-gray-700'>
                 Type of links allowed:
               </label>
@@ -279,9 +346,9 @@ const ArticleSpecification: React.FC<ArticleSpecificationProps> = ({
                   </span>
                 </label>
               </div>
-            </div>
+            </div> */}
 
-            <div>
+            {/* <div>
               <label className='block text-sm font-medium text-gray-700'>
                 Tagging articles policy:
               </label>
@@ -318,13 +385,13 @@ const ArticleSpecification: React.FC<ArticleSpecificationProps> = ({
                   </span>
                 </label>
               </div>
-            </div>
+            </div> */}
 
             <div>
-              <label className='block text-sm font-medium text-gray-700'>
+              <label className='block text-sm font-medium mb-1'>
                 A number of links to the advertiser in the article:
               </label>
-              <div className='mt-2 space-y-2'>
+              <div className='mt-2 space-y-2 grid'>
                 <label className='inline-flex items-center'>
                   <input
                     type='radio'
@@ -332,7 +399,9 @@ const ArticleSpecification: React.FC<ArticleSpecificationProps> = ({
                     value='noTag'
                     className='form-radio'
                   />
-                  <span className='ml-2'>We do not tag paid articles.</span>
+                  <span className='ml-2 radiofont'>
+                    We do not tag paid articles.
+                  </span>
                 </label>
                 <label className='inline-flex items-center'>
                   <input
@@ -341,7 +410,7 @@ const ArticleSpecification: React.FC<ArticleSpecificationProps> = ({
                     value='maxLinks'
                     className='form-radio'
                   />
-                  <span className='ml-2'>
+                  <span className='ml-2 radiofont'>
                     A maximum number of links to the advertiser:
                   </span>
                 </label>
@@ -375,7 +444,33 @@ const ArticleSpecification: React.FC<ArticleSpecificationProps> = ({
             </div>
 
             <div>
-              <label className='block text-sm font-medium text-gray-700'>
+              <label className='block text-sm font-medium mb-1'>
+                I Allow DOFOLLOW links in the article
+              </label>
+              <div className='mt-2 space-y-2 grid'>
+                <label className='inline-flex items-center'>
+                  <input
+                    type='radio'
+                    {...register('allowDofollow')}
+                    value='true'
+                    className='form-radio'
+                  />
+                  <span className='ml-2 radiofont'>Yes</span>
+                </label>
+                <label className='inline-flex items-center'>
+                  <input
+                    type='radio'
+                    {...register('allowDofollow')}
+                    value='false'
+                    className='form-radio'
+                  />
+                  <span className='ml-2 radiofont'>No</span>
+                </label>
+              </div>
+            </div>
+
+            <div>
+              <label className='block text-sm font-medium mb-1'>
                 Other links in the article:
               </label>
               <div className='mt-2 space-y-2'>
@@ -386,7 +481,7 @@ const ArticleSpecification: React.FC<ArticleSpecificationProps> = ({
                     value='true'
                     className='form-radio'
                   />
-                  <span className='ml-2'>
+                  <span className='ml-2 radiofont'>
                     We allow links to other websites in the content of the
                     article.
                   </span>
@@ -398,7 +493,7 @@ const ArticleSpecification: React.FC<ArticleSpecificationProps> = ({
                     value='false'
                     className='form-radio'
                   />
-                  <span className='ml-2'>
+                  <span className='ml-2 radiofont'>
                     We DO NOT allow links to other websites in the content of
                     the article.
                   </span>
@@ -407,7 +502,59 @@ const ArticleSpecification: React.FC<ArticleSpecificationProps> = ({
             </div>
 
             <div>
-              <label className='block text-sm font-medium text-gray-700'>
+              <label className='block text-sm font-medium mb-1'>
+                Type of links allowed:
+              </label>
+              <div className='mt-2 space-y-2 grid'>
+                <label className='inline-flex items-center'>
+                  <input
+                    type='radio'
+                    {...register('linkType')}
+                    value='brandOnly'
+                    className='form-radio'
+                  />
+                  <span className='ml-2 radiofont'>
+                    Only brand links, URL, navigational, graphic links.
+                  </span>
+                </label>
+                <label className='inline-flex items-center'>
+                  <input
+                    type='radio'
+                    {...register('linkType')}
+                    value='brandedGeneric'
+                    className='form-radio'
+                  />
+                  <span className='ml-2 radiofont'>
+                    Only branded and generic links.
+                  </span>
+                </label>
+                <label className='inline-flex items-center'>
+                  <input
+                    type='radio'
+                    {...register('linkType')}
+                    value='mixed'
+                    className='form-radio'
+                  />
+                  <span className='ml-2 radiofont'>
+                    Also mixed links (partly exact match anchors).
+                  </span>
+                </label>
+                <label className='inline-flex items-center'>
+                  <input
+                    type='radio'
+                    {...register('linkType')}
+                    value='all'
+                    className='form-radio'
+                  />
+                  <span className='ml-2 radiofont'>
+                    All links, including exact match anchors.
+                  </span>
+                </label>
+              </div>
+            </div>
+
+            <div>
+              <label className='block text-sm font-medium mb-1'>
                 Other content rules/specifications:
               </label>
               <textarea
@@ -421,7 +568,7 @@ const ArticleSpecification: React.FC<ArticleSpecificationProps> = ({
                 </p>
               )}
             </div>
-          </div>
+          </>
         )}
       </div>
       {/* <button
