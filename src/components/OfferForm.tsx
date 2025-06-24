@@ -7,166 +7,19 @@ import { addWebsite, updateWebsite } from '../store/websiteSlice';
 import { RootState } from '../store';
 import { useNavigate, useParams } from 'react-router-dom';
 
-const offerSchema = z.object({
-  guestPostPrice1: z.number().nonnegative('Must be non-negative'),
-  linkInsertionPrice1: z.number().nonnegative('Must be non-negative'),
-  homePagePrice: z.number().nonnegative('Must be non-negative'),
-  homePageDescription: z.string().optional(),
-  articleWordsMin: z.number().nonnegative('Must be non-negative'),
-  articleWordsMax: z.number().nonnegative('Must be non-negative'),
-  articleLinksMax: z.number().nonnegative('Must be non-negative'),
-  samePriceForAllNiches: z.boolean().optional(),
-  greyNichePrice: z.number().nonnegative('Must be non-negative').optional(),
-  guestPostPrice: z.union([
-    z.number().nonnegative('Must be non-negative'),
-    z.object({
-      Gambling: z.number().nonnegative('Must be non-negative').optional(),
-      Crypto: z.number().nonnegative('Must be non-negative').optional(),
-      Adult: z.number().nonnegative('Must be non-negative').optional(),
-    }),
-  ]),
-  linkInsertionPrice: z.union([
-    z.number().nonnegative('Must be non-negative'),
-    z.object({
-      Gambling: z.number().nonnegative('Must be non-negative').optional(),
-      Crypto: z.number().nonnegative('Must be non-negative').optional(),
-      Adult: z.number().nonnegative('Must be non-negative').optional(),
-    }),
-  ]),
-});
-
-type OfferFormData = z.infer<typeof offerSchema>;
-
-interface OfferFormProps {
-  websiteToEdit?: OfferFormData | (any & { id?: number });
-}
-
-const OfferForm: React.FC<OfferFormProps> = ({ websiteToEdit }) => {
+const OfferForm: React.FC<any> = ({
+  samePriceForAllNiches,
+  errors,
+  register,
+}: any) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { id } = useParams<{ id?: string }>();
-  //   const websites = useSelector((state: RootState) => state.websites.websites);
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    watch,
-    reset,
-  } = useForm<OfferFormData>({
-    resolver: zodResolver(offerSchema),
-    defaultValues: {
-      guestPostPrice1: 0,
-      linkInsertionPrice1: 0,
-      guestPostPrice: {
-        Gambling: 0,
-        Crypto: 0,
-        Adult: 0,
-      },
-      linkInsertionPrice: {
-        Gambling: 0,
-        Crypto: 0,
-        Adult: 0,
-      },
-      homePagePrice: 0,
-      homePageDescription: '',
-      articleWordsMin: 0,
-      articleWordsMax: 0,
-      articleLinksMax: 0,
-      samePriceForAllNiches: false,
-      greyNichePrice: 0,
-    },
-  });
 
   const [activeTab, setActiveTab] = useState('normalOffers');
 
-  useEffect(() => {
-    if (websiteToEdit) {
-      const normalizedGuestPostPrice =
-        typeof websiteToEdit.guestPostPrice === 'number'
-          ? websiteToEdit.guestPostPrice
-          : websiteToEdit.guestPostPrice || {
-              Gambling: 0,
-              Crypto: 0,
-              Adult: 0,
-            };
-      const normalizedLinkInsertionPrice =
-        typeof websiteToEdit.linkInsertionPrice === 'number'
-          ? websiteToEdit.linkInsertionPrice
-          : websiteToEdit.linkInsertionPrice || {
-              Gambling: 0,
-              Crypto: 0,
-              Adult: 0,
-            };
-
-      reset({
-        ...websiteToEdit,
-        guestPostPrice: normalizedGuestPostPrice,
-        linkInsertionPrice: normalizedLinkInsertionPrice,
-      });
-    } else {
-      localStorage.removeItem('offerFormData'); // Clear saved data
-      reset({
-        guestPostPrice1: 0,
-        linkInsertionPrice1: 0,
-        guestPostPrice: { Gambling: 0, Crypto: 0, Adult: 0 },
-        linkInsertionPrice: { Gambling: 0, Crypto: 0, Adult: 0 },
-        homePagePrice: 0,
-        homePageDescription: '',
-        articleWordsMin: 0,
-        articleWordsMax: 0,
-        articleLinksMax: 0,
-        samePriceForAllNiches: false,
-        greyNichePrice: 0,
-      });
-    }
-  }, [websiteToEdit, reset]);
-
-  useEffect(() => {
-    const subscription = watch((value) => {
-      localStorage.setItem('offerFormData', JSON.stringify(value));
-    });
-    return () => subscription.unsubscribe();
-  }, [watch]);
-
-  const onSubmit = (data: OfferFormData) => {
-    const websiteDetails = JSON.parse(
-      localStorage.getItem('websiteDetailsFormData') || '{}'
-    );
-
-    const articleDetails = JSON.parse(
-      localStorage.getItem('articleSpecificationFormData') || '{}'
-    );
-    const websiteData: any = {
-      ...websiteDetails,
-      ...articleDetails,
-      ...data,
-      id: id ? parseInt(id) : Date.now(),
-    };
-
-    console.log('Website Data:', websiteData);
-    if (
-      websiteData?.category &&
-      websiteData?.category.length > 0 &&
-      websiteData?.url &&
-      websiteData?.country &&
-      websiteData?.language &&
-      websiteData?.description
-    ) {
-      if (id && websiteToEdit) {
-        dispatch(updateWebsite(websiteData));
-      } else {
-        dispatch(addWebsite(websiteData));
-      }
-      localStorage.removeItem('websiteDetailsFormData');
-      localStorage.removeItem('offerFormData');
-      localStorage.removeItem('articleSpecificationFormData');
-      navigate('/');
-    }
-  };
-
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <>
       <h3 className='font-semibold text-gray-700 mb-4 mt-12 detailhighfont'>
         Create offer
       </h3>
@@ -175,36 +28,42 @@ const OfferForm: React.FC<OfferFormProps> = ({ websiteToEdit }) => {
           <nav className='flex space-x-6'>
             <button
               type='button'
-              onClick={() => setActiveTab('normalOffers')}
+              onClick={() => {
+                if (setActiveTab) setActiveTab('normalOffers');
+              }}
               className={`pb-2 text-sm font-medium ${
                 activeTab === 'normalOffers'
                   ? 'text-purple-600 border-b-2 border-purple-600'
                   : 'text-gray-500 hover:text-gray-700'
               }`}
             >
-              Normal offer
+              Normal Offer
             </button>
             <button
               type='button'
-              onClick={() => setActiveTab('articleSpecs')}
+              onClick={() => {
+                if (setActiveTab) setActiveTab('articleSpecs');
+              }}
               className={`pb-2 text-sm font-medium ${
                 activeTab === 'articleSpecs'
-                  ? 'text-purple-600 border-b-2 border-purple-600'
+                  ? 'text-purple-600 border-b-2 border-blue-600'
                   : 'text-gray-500 hover:text-gray-700'
               }`}
             >
-              Grey Niche offer
+              Grey Niche Offer
             </button>
             <button
               type='button'
-              onClick={() => setActiveTab('homePageOffer')}
+              onClick={() => {
+                if (setActiveTab) setActiveTab('homePageOffer');
+              }}
               className={`pb-2 text-sm font-medium ${
                 activeTab === 'homePageOffer'
                   ? 'text-purple-600 border-b-2 border-purple-600'
                   : 'text-gray-500 hover:text-gray-700'
               }`}
             >
-              Homepage link
+              Homepage Link
             </button>
           </nav>
         </div>
@@ -214,7 +73,7 @@ const OfferForm: React.FC<OfferFormProps> = ({ websiteToEdit }) => {
               <div className='grid grid-cols-4 gap-4'>
                 <div>
                   <label className='block text-sm font-medium mb-1'>
-                    Guest posting
+                    Guest Posting
                   </label>
                   <input
                     type='number'
@@ -232,7 +91,7 @@ const OfferForm: React.FC<OfferFormProps> = ({ websiteToEdit }) => {
                 </div>
                 <div>
                   <label className='block text-sm font-medium mb-1'>
-                    Link insertion
+                    Link Insertion
                   </label>
                   <input
                     type='number'
@@ -299,10 +158,10 @@ const OfferForm: React.FC<OfferFormProps> = ({ websiteToEdit }) => {
                   className='mr-2 text-purple-600'
                 />
                 <span className='text-sm text-gray-700'>
-                  I offer same price for all grey niches
+                  I offer the same price for all grey niches
                 </span>
               </div>
-              {watch('samePriceForAllNiches') && (
+              {samePriceForAllNiches && (
                 <div className='grid grid-cols-4 gap-4 mt-4 mb-4'>
                   <div>
                     <label className='block text-sm font-medium mb-1'>
@@ -331,34 +190,32 @@ const OfferForm: React.FC<OfferFormProps> = ({ websiteToEdit }) => {
                       {niche}
                     </label>
                     <div className='space-y-2'>
-                      <div>
-                        <label className='block text-xs font-medium mb-1'>
-                          Price for Guest Posting
-                        </label>
-                        <input
-                          type='number'
-                          {...register(`guestPostPrice.${niche}` as const, {
-                            valueAsNumber: true,
-                          })}
-                          className='w-full p-2 border rounded-md'
-                          placeholder='Enter price'
-                          disabled={watch('samePriceForAllNiches')}
-                        />
-                      </div>
-                      <div>
-                        <label className='block text-xs font-medium mb-1'>
-                          Price for Link Insertion
-                        </label>
-                        <input
-                          type='number'
-                          {...register(`linkInsertionPrice.${niche}` as const, {
-                            valueAsNumber: true,
-                          })}
-                          className='w-full p-2 border rounded-md'
-                          placeholder='Enter price'
-                          disabled={watch('samePriceForAllNiches')}
-                        />
-                      </div>
+                      <label className='block text-xs font-medium mb-1'>
+                        Price for Guest Posting
+                      </label>
+                      <input
+                        type='number'
+                        {...register(`guestPostPrice.${niche}` as const, {
+                          valueAsNumber: true,
+                        })}
+                        className='w-full p-2 border rounded-md'
+                        placeholder='Enter price'
+                        disabled={samePriceForAllNiches}
+                      />
+                    </div>
+                    <div>
+                      <label className='block text-xs font-medium mb-1'>
+                        Price for Link Insertion
+                      </label>
+                      <input
+                        type='number'
+                        {...register(`linkInsertionPrice.${niche}` as const, {
+                          valueAsNumber: true,
+                        })}
+                        className='w-full p-2 border rounded-md'
+                        placeholder='Enter price'
+                        disabled={samePriceForAllNiches}
+                      />
                     </div>
                   </div>
                 ))}
@@ -367,13 +224,7 @@ const OfferForm: React.FC<OfferFormProps> = ({ websiteToEdit }) => {
           )}
         </div>
       </div>
-      <button
-        type='submit'
-        className='bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 mt-6'
-      >
-        Save
-      </button>
-    </form>
+    </>
   );
 };
 

@@ -4,128 +4,22 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import './style.css';
 
-const articleSpecificationSchema = z.object({
-  isWritingIncluded: z.boolean(),
-  articleLengthOption: z.string().optional(),
-  articleWordsMin: z.number().min(0).optional(),
-  articleWordsMax: z.number().min(0).optional(),
-  allowDofollow: z.boolean(),
-  linkType: z.string(),
-  taggingPolicy: z.string(),
-  advertiserLinksOption: z.string(),
-  advertiserLinksMin: z.number().min(0).optional(),
-  advertiserLinksMax: z.number().min(0).optional(),
-  otherLinks: z.boolean(),
-  articleDescription: z.string().min(1, 'Description is required').optional(),
-});
-
-type ArticleSpecificationFormData = z.infer<typeof articleSpecificationSchema>;
-
-interface ArticleSpecificationProps {
-  onSubmit?: (data: ArticleSpecificationFormData) => void;
-  websiteToEdit?: any;
-}
-
-const ArticleSpecification: React.FC<ArticleSpecificationProps> = ({
-  onSubmit,
-  websiteToEdit,
-}) => {
-  const {
-    register,
-    handleSubmit,
-    control,
-    formState: { errors, isValid },
-    watch,
-    setValue,
-    reset,
-    trigger,
-  } = useForm<ArticleSpecificationFormData>({
-    resolver: zodResolver(articleSpecificationSchema),
-    defaultValues: {
-      isWritingIncluded: true,
-      articleLengthOption: 'notLimited',
-      articleWordsMin: undefined,
-      articleWordsMax: undefined,
-      allowDofollow: false,
-      linkType: 'brandOnly',
-      taggingPolicy: 'noTag',
-      advertiserLinksOption: 'noTag',
-      advertiserLinksMin: undefined,
-      advertiserLinksMax: undefined,
-      otherLinks: false,
-      articleDescription: '',
-    },
-    mode: 'onChange',
-  });
-
-  const isWritingIncluded = watch('isWritingIncluded');
-  const articleLengthOption = watch('articleLengthOption');
-  const advertiserLinksOption = watch('advertiserLinksOption');
-
-  useEffect(() => {
-    if (websiteToEdit) {
-      reset({
-        isWritingIncluded: websiteToEdit.isWritingIncluded ?? true,
-        articleLengthOption: websiteToEdit.articleLengthOption ?? 'notLimited',
-        articleWordsMin: websiteToEdit.articleWordsMin ?? undefined,
-        articleWordsMax: websiteToEdit.articleWordsMax ?? undefined,
-        allowDofollow: websiteToEdit.allowDofollow ?? false,
-        linkType: websiteToEdit.linkType ?? 'brandOnly',
-        taggingPolicy: websiteToEdit.taggingPolicy ?? 'noTag',
-        advertiserLinksOption: websiteToEdit.advertiserLinksOption ?? 'noTag',
-        advertiserLinksMin: websiteToEdit.advertiserLinksMin ?? undefined,
-        advertiserLinksMax: websiteToEdit.advertiserLinksMax ?? undefined,
-        otherLinks: websiteToEdit.otherLinks ?? false,
-        articleDescription: websiteToEdit.articleDescription ?? '',
-      });
-      trigger();
-    } else {
-      localStorage.removeItem('articleSpecificationFormData');
-      reset({
-        isWritingIncluded: true,
-        articleLengthOption: 'notLimited',
-        articleWordsMin: undefined,
-        articleWordsMax: undefined,
-        allowDofollow: false,
-        linkType: 'brandOnly',
-        taggingPolicy: 'noTag',
-        advertiserLinksOption: 'noTag',
-        advertiserLinksMin: undefined,
-        advertiserLinksMax: undefined,
-        otherLinks: false,
-        articleDescription: '',
-      });
-    }
-  }, [websiteToEdit, reset, trigger]);
-
-  useEffect(() => {
-    const subscription = watch((value) => {
-      localStorage.setItem(
-        'articleSpecificationFormData',
-        JSON.stringify(value)
-      );
-    });
-    return () => subscription.unsubscribe();
-  }, [watch]);
-
-  const onFormSubmit = (data: ArticleSpecificationFormData) => {
-    if (!isValid) {
-      trigger();
-      return;
-    }
-    localStorage.removeItem('articleSpecificationFormData');
-    onSubmit?.(data);
-  };
-
+const ArticleSpecification: React.FC<any> = ({
+  register,
+  errors,
+  isWritingIncluded,
+  articleLengthOption,
+  advertiserLinksOption,
+}: any) => {
   return (
-    <form onSubmit={handleSubmit(onFormSubmit)}>
+    <>
       <h3 className='font-semibold text-gray-700 mb-4 mt-12 detailhighfont'>
         Article Specification
       </h3>
       <div className='bg-white p-6 rounded-lg shadow-md grid grid-cols-2 gap-6'>
         <div>
           <label className='block text-sm font-medium mb-1'>
-            Is writing of an article included in the offer?
+            Is Writing Included in the Offer?
           </label>
           <div className='mt-2 space-y-2 grid'>
             <label className='inline-flex items-center'>
@@ -153,61 +47,9 @@ const ArticleSpecification: React.FC<ArticleSpecificationProps> = ({
 
         {isWritingIncluded && (
           <>
-            {/* <div>
-              <label className='block text-sm font-medium text-gray-700'>
-                Number of words in the article
-              </label>
-              <div className='mt-2 space-y-2'>
-                <label className='inline-flex items-center'>
-                  <input
-                    type='radio'
-                    {...register('articleLengthOption')}
-                    value='notLimited'
-                    className='form-radio'
-                  />
-                  <span className='ml-2'>
-                    Length of the article is not limited.
-                  </span>
-                </label>
-                <label className='inline-flex items-center'>
-                  <input
-                    type='radio'
-                    {...register('articleLengthOption')}
-                    value='clientProvided'
-                    className='form-radio'
-                  />
-                  <span className='ml-2'>
-                    No, the advertiser (client) needs to provide the content
-                  </span>
-                </label>
-                {articleLengthOption === 'clientProvided' && (
-                  <div className='mt-2 flex space-x-4'>
-                    <input
-                      type='number'
-                      {...register('articleWordsMin', { valueAsNumber: true })}
-                      placeholder='Min'
-                      className='w-24 p-2 border rounded'
-                    />
-                    <input
-                      type='number'
-                      {...register('articleWordsMax', { valueAsNumber: true })}
-                      placeholder='Max'
-                      className='w-24 p-2 border rounded'
-                    />
-                  </div>
-                )}
-                {(errors.articleWordsMin || errors.articleWordsMax) && (
-                  <p className='text-red-500 text-sm'>
-                    {errors.articleWordsMin?.message ||
-                      errors.articleWordsMax?.message}
-                  </p>
-                )}
-              </div>
-            </div> */}
-
             <div>
               <label className='block text-sm font-medium mb-1'>
-                Tagging articles policy:
+                Tagging Articles Policy
               </label>
               <div className='mt-2 space-y-2 grid'>
                 <label className='inline-flex items-center'>
@@ -248,7 +90,7 @@ const ArticleSpecification: React.FC<ArticleSpecificationProps> = ({
 
             <div>
               <label className='block text-sm font-medium mb-1'>
-                Number of words in the article
+                Number of Words in the Article
               </label>
               <div className='mt-2 space-y-2'>
                 <label className='inline-flex items-center'>
@@ -277,119 +119,35 @@ const ArticleSpecification: React.FC<ArticleSpecificationProps> = ({
                   <div className='mt-2 flex space-x-4'>
                     <input
                       type='number'
-                      {...register('articleWordsMin', { valueAsNumber: true })}
+                      {...register('articleWordsMinSpec', {
+                        valueAsNumber: true,
+                      })}
                       placeholder='Min'
                       className='w-24 p-2 border rounded'
                     />
                     <input
                       type='number'
-                      {...register('articleWordsMax', { valueAsNumber: true })}
+                      {...register('articleWordsMaxSpec', {
+                        valueAsNumber: true,
+                      })}
                       placeholder='Max'
                       className='w-24 p-2 border rounded'
                     />
                   </div>
                 )}
-                {(errors.articleWordsMin || errors.articleWordsMax) && (
+                {(errors?.articleWordsMinSpec ||
+                  errors?.articleWordsMaxSpec) && (
                   <p className='text-red-500 text-sm'>
-                    {errors.articleWordsMin?.message ||
-                      errors.articleWordsMax?.message}
+                    {errors?.articleWordsMinSpec?.message ||
+                      errors?.articleWordsMaxSpec?.message}
                   </p>
                 )}
               </div>
             </div>
 
-            {/* <div>
-              <label className='block text-sm font-medium text-gray-700'>
-                Type of links allowed:
-              </label>
-              <div className='mt-2 space-y-2'>
-                <label className='inline-flex items-center'>
-                  <input
-                    type='radio'
-                    {...register('linkType')}
-                    value='brandOnly'
-                    className='form-radio'
-                  />
-                  <span className='ml-2'>
-                    Only brand links, URL, navigational, graphic links.
-                  </span>
-                </label>
-                <label className='inline-flex items-center'>
-                  <input
-                    type='radio'
-                    {...register('linkType')}
-                    value='brandedGeneric'
-                    className='form-radio'
-                  />
-                  <span className='ml-2'>Only branded and generic links.</span>
-                </label>
-                <label className='inline-flex items-center'>
-                  <input
-                    type='radio'
-                    {...register('linkType')}
-                    value='mixed'
-                    className='form-radio'
-                  />
-                  <span className='ml-2'>
-                    Also mixed links (partly exact match anchors).
-                  </span>
-                </label>
-                <label className='inline-flex items-center'>
-                  <input
-                    type='radio'
-                    {...register('linkType')}
-                    value='all'
-                    className='form-radio'
-                  />
-                  <span className='ml-2'>
-                    All links, including exact match anchors.
-                  </span>
-                </label>
-              </div>
-            </div> */}
-
-            {/* <div>
-              <label className='block text-sm font-medium text-gray-700'>
-                Tagging articles policy:
-              </label>
-              <div className='mt-2 space-y-2'>
-                <label className='inline-flex items-center'>
-                  <input
-                    type='radio'
-                    {...register('taggingPolicy')}
-                    value='noTag'
-                    className='form-radio'
-                  />
-                  <span className='ml-2'>We do not tag paid articles.</span>
-                </label>
-                <label className='inline-flex items-center'>
-                  <input
-                    type='radio'
-                    {...register('taggingPolicy')}
-                    value='onRequest'
-                    className='form-radio'
-                  />
-                  <span className='ml-2'>
-                    Articles are tagged only at the advertiser's request.
-                  </span>
-                </label>
-                <label className='inline-flex items-center'>
-                  <input
-                    type='radio'
-                    {...register('taggingPolicy')}
-                    value='always'
-                    className='form-radio'
-                  />
-                  <span className='ml-2'>
-                    We always tag articles: "Sponsored article".
-                  </span>
-                </label>
-              </div>
-            </div> */}
-
             <div>
               <label className='block text-sm font-medium mb-1'>
-                A number of links to the advertiser in the article:
+                A Number of Links to the Advertiser in the Article
               </label>
               <div className='mt-2 space-y-2 grid'>
                 <label className='inline-flex items-center'>
@@ -411,7 +169,7 @@ const ArticleSpecification: React.FC<ArticleSpecificationProps> = ({
                     className='form-radio'
                   />
                   <span className='ml-2 radiofontinside'>
-                    A maximum number of links to the advertiser:
+                    A maximum number of links to the advertiser
                   </span>
                 </label>
                 {advertiserLinksOption === 'maxLinks' && (
@@ -434,10 +192,10 @@ const ArticleSpecification: React.FC<ArticleSpecificationProps> = ({
                     />
                   </div>
                 )}
-                {(errors.advertiserLinksMin || errors.advertiserLinksMax) && (
+                {(errors?.advertiserLinksMin || errors?.advertiserLinksMax) && (
                   <p className='text-red-500 text-sm'>
-                    {errors.advertiserLinksMin?.message ||
-                      errors.advertiserLinksMax?.message}
+                    {errors?.advertiserLinksMin?.message ||
+                      errors?.advertiserLinksMax?.message}
                   </p>
                 )}
               </div>
@@ -445,7 +203,7 @@ const ArticleSpecification: React.FC<ArticleSpecificationProps> = ({
 
             <div>
               <label className='block text-sm font-medium mb-1'>
-                I Allow DOFOLLOW links in the article
+                I Allow DOFOLLOW Links
               </label>
               <div className='mt-2 space-y-2 grid'>
                 <label className='inline-flex items-center'>
@@ -471,7 +229,7 @@ const ArticleSpecification: React.FC<ArticleSpecificationProps> = ({
 
             <div>
               <label className='block text-sm font-medium mb-1'>
-                Other links in the article:
+                Other Links in the Article
               </label>
               <div className='mt-2 space-y-2'>
                 <label className='inline-flex items-center'>
@@ -483,7 +241,7 @@ const ArticleSpecification: React.FC<ArticleSpecificationProps> = ({
                   />
                   <span className='ml-2 radiofontinside'>
                     We allow links to other websites in the content of the
-                    article.
+                    article
                   </span>
                 </label>
                 <label className='inline-flex items-center'>
@@ -494,8 +252,7 @@ const ArticleSpecification: React.FC<ArticleSpecificationProps> = ({
                     className='form-radio'
                   />
                   <span className='ml-2 radiofontinside'>
-                    We DO NOT allow links to other websites in the content of
-                    the article.
+                    We DO NOT allow links to other websites in the article
                   </span>
                 </label>
               </div>
@@ -503,7 +260,7 @@ const ArticleSpecification: React.FC<ArticleSpecificationProps> = ({
 
             <div>
               <label className='block text-sm font-medium mb-1'>
-                Type of links allowed:
+                Type of Links Allowed
               </label>
               <div className='mt-2 space-y-2 grid'>
                 <label className='inline-flex items-center'>
@@ -514,7 +271,7 @@ const ArticleSpecification: React.FC<ArticleSpecificationProps> = ({
                     className='form-radio'
                   />
                   <span className='ml-2 radiofontinside'>
-                    Only brand links, URL, navigational, graphic links.
+                    Only brand links, URL, navigational, graphic links
                   </span>
                 </label>
                 <label className='inline-flex items-center'>
@@ -525,7 +282,7 @@ const ArticleSpecification: React.FC<ArticleSpecificationProps> = ({
                     className='form-radio'
                   />
                   <span className='ml-2 radiofontinside'>
-                    Only branded and generic links.
+                    Only branded and generic links
                   </span>
                 </label>
                 <label className='inline-flex items-center'>
@@ -536,7 +293,7 @@ const ArticleSpecification: React.FC<ArticleSpecificationProps> = ({
                     className='form-radio'
                   />
                   <span className='ml-2 radiofontinside'>
-                    Also mixed links (partly exact match anchors).
+                    Also mixed links (partly exact match anchors)
                   </span>
                 </label>
                 <label className='inline-flex items-center'>
@@ -547,7 +304,7 @@ const ArticleSpecification: React.FC<ArticleSpecificationProps> = ({
                     className='form-radio'
                   />
                   <span className='ml-2 radiofontinside'>
-                    All links, including exact match anchors.
+                    All links, including exact match anchors
                   </span>
                 </label>
               </div>
@@ -555,29 +312,23 @@ const ArticleSpecification: React.FC<ArticleSpecificationProps> = ({
 
             <div>
               <label className='block text-sm font-medium mb-1'>
-                Other content rules/specifications:
+                Other Content Rules/Specifications
               </label>
               <textarea
                 {...register('articleDescription')}
                 className='mt-2 w-full p-2 border rounded'
                 placeholder='Description'
               />
-              {errors.articleDescription && (
+              {errors?.articleDescription && (
                 <p className='text-red-500 text-sm'>
-                  {errors.articleDescription.message}
+                  {errors?.articleDescription?.message}
                 </p>
               )}
             </div>
           </>
         )}
       </div>
-      {/* <button
-        type='submit'
-        className='mt-4 px-4 py-2 bg-blue-500 text-white rounded'
-      >
-        Save
-      </button> */}
-    </form>
+    </>
   );
 };
 

@@ -5,90 +5,15 @@ import * as z from 'zod';
 import Select from 'react-select';
 import { countries, languages } from 'countries-list';
 
-const websiteDetailsSchema = z.object({
-  url: z.string().url('Invalid URL').min(1, 'URL is required'),
-  country: z.string().min(1, 'Country is required'),
-  language: z.string().min(1, 'Language is required'),
-  category: z.array(z.string()).min(1, 'At least one category is required'),
-  description: z.string().min(1, 'Description is required'),
-  isOwner: z.boolean().optional(),
-});
-
-type WebsiteDetailsFormData = z.infer<typeof websiteDetailsSchema>;
-
-interface WebsiteDetailsFormProps {
-  onSubmit?: (data: WebsiteDetailsFormData) => void;
-  websiteToEdit?: WebsiteDetailsFormData | (any & { id?: number });
-}
-
-const WebsiteDetailsForm: React.FC<WebsiteDetailsFormProps> = ({
-  onSubmit,
-  websiteToEdit,
-}) => {
-  const {
-    register,
-    handleSubmit,
-    control,
-    formState: { errors, isValid },
-    watch,
-    setValue,
-    reset,
-    trigger,
-  } = useForm<WebsiteDetailsFormData>({
-    resolver: zodResolver(websiteDetailsSchema),
-    defaultValues: {
-      url: '',
-      country: '',
-      language: '',
-      category: [],
-      description: '',
-      isOwner: false,
-    },
-    mode: 'onChange', // Validate on change to catch empty description immediately
-  });
-
-  const selectedCategories = watch('category');
-
-  useEffect(() => {
-    if (websiteToEdit) {
-      reset({
-        ...websiteToEdit,
-        category: Array.isArray(websiteToEdit.category)
-          ? websiteToEdit.category
-          : websiteToEdit.category
-          ? [websiteToEdit.category]
-          : [],
-      });
-      // Trigger validation on mount to ensure existing data is valid
-      trigger();
-    } else {
-      localStorage.removeItem('websiteDetailsFormData');
-      reset({
-        url: '',
-        country: '',
-        language: '',
-        category: [],
-        description: '',
-        isOwner: false,
-      });
-    }
-  }, [websiteToEdit, reset, trigger]);
-
-  useEffect(() => {
-    const subscription = watch((value) => {
-      localStorage.setItem('websiteDetailsFormData', JSON.stringify(value));
-    });
-    return () => subscription.unsubscribe();
-  }, [watch]);
-
-  const toggleCategory = (cat: string) => {
-    const current = watch('category');
-    const updated = current.includes(cat)
-      ? current.filter((c) => c !== cat)
-      : [...current, cat];
-    setValue('category', updated, { shouldValidate: true });
-  };
-
+const WebsiteDetailsForm: React.FC<any> = ({
+  errors,
+  control,
+  register,
+  languageList,
+  selectedCategories,
+  toggleCategory,
+  trigger,
+}: any) => {
   const getFlagUrl = (code: string) =>
     `https://cdn.jsdelivr.net/npm/country-flag-icons/3x2/${code}.svg`;
 
@@ -112,23 +37,8 @@ const WebsiteDetailsForm: React.FC<WebsiteDetailsFormProps> = ({
     code,
   }));
 
-  const languageList = Object.entries(languages).map(([code, language]) => ({
-    code,
-    name: language.name,
-  }));
-
-  const onFormSubmit = (data: WebsiteDetailsFormData) => {
-    if (!isValid) {
-      // Trigger validation for all fields to show errors
-      trigger();
-      return;
-    }
-    localStorage.removeItem('websiteDetailsFormData');
-    onSubmit?.(data);
-  };
-
   return (
-    <form onSubmit={handleSubmit(onFormSubmit)}>
+    <>
       <h3 className='font-semibold text-gray-700 mb-4 detailhighfont'>
         Website details
       </h3>
@@ -150,14 +60,14 @@ const WebsiteDetailsForm: React.FC<WebsiteDetailsFormProps> = ({
           </div>
           <div>
             <label className='block mb-1 detailsmallfont'>
-              Website's Primary language
+              Website's Primary Language
             </label>
             <select
               {...register('language')}
               className='w-full p-2 border rounded-md'
             >
               <option value=''>Select Language</option>
-              {languageList.map((lang) => (
+              {languageList.map((lang: any) => (
                 <option key={lang.code} value={lang.name}>
                   {lang.name}
                 </option>
@@ -169,7 +79,7 @@ const WebsiteDetailsForm: React.FC<WebsiteDetailsFormProps> = ({
           </div>
           <div>
             <label className='block mb-1 detailsmallfont'>
-              Your Majority of traffic comes from
+              Your Majority of Traffic Comes From
             </label>
             <Controller
               name='country'
@@ -279,7 +189,7 @@ const WebsiteDetailsForm: React.FC<WebsiteDetailsFormProps> = ({
             {...register('description')}
             className='w-full p-2 border rounded-md h-24'
             placeholder='Describe your website...'
-            onBlur={() => trigger('description')} // Trigger validation on blur
+            onBlur={() => trigger('description')}
           />
           {errors.description && (
             <p className='text-red-500 text-sm'>{errors.description.message}</p>
@@ -298,7 +208,7 @@ const WebsiteDetailsForm: React.FC<WebsiteDetailsFormProps> = ({
           </label>
         </div>
       </div>
-    </form>
+    </>
   );
 };
 
