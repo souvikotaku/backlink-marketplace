@@ -46,6 +46,13 @@
   color: #0f0c1b;
   line-height: 40px;
 }
+
+.detailhighfontmain {
+  font-size: 32px;
+  font-weight: 600;
+  color: #0f0c1b;
+  line-height: 44px;
+}
 .detailsmallfont {
   font-size: 14px;
   font-weight: 500;
@@ -70,4 +77,8 @@
   color: #0f0c1b;
   line-height: 18.29px;
   border-radius: 45px;
+}
+
+.radiofontinside li {
+  margin-top: 10px;
 }

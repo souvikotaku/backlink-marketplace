@@ -66,9 +66,38 @@ const WebsiteDetailsPage: React.FC = () => {
     <div className='container mx-auto pb-4'>
       <WebsiteHeader />
       <div className='max-w-6xl mx-auto'>
-        <h2 className='text-2xl font-bold text-gray-900 mb-6'>
+        <h2 className='detailhighfontmain mb-6'>
           {id ? 'Edit Website' : 'Add Website'}
         </h2>
+        {/* New Section with YouTube Video */}
+        <div className='flex items-center justify-between mb-6 p-4 bg-white rounded-lg shadow'>
+          <div className='w-1/2 pr-4'>
+            <h2 className='mb-2 detailhighfont'>
+              Learn how to get best out of linksera
+            </h2>
+            <ul className='list-disc pl-5 radiofontinside'>
+              <li>How to add your website to the marketplace</li>
+              <li>Setting pricing and niche/category filters</li>
+              <li>Uploading sample articles or guidelines</li>
+              <li>Editing or updating your website listing anytime</li>
+              <li>Tips to make your listing stand out to buyers</li>
+            </ul>
+          </div>
+          <div className='w-1/2'>
+            <iframe
+              width='100%'
+              height='315'
+              src='https://www.youtube.com/embed/fShlVhCfHig' // Replace with your YouTube video ID
+              title='Linksera Tutorial'
+              frameBorder='0'
+              allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
+              allowFullScreen
+              className='rounded-lg'
+            ></iframe>
+          </div>
+        </div>
+
+        {/* Existing Preconditions Section */}
         <div className='mb-6'>
           <div
             className={`flex items-center justify-between p-4 bg-white rounded-lg shadow ${
@@ -79,20 +108,6 @@ const WebsiteDetailsPage: React.FC = () => {
               Hey, Accept Preconditions before you start the listing!
             </span>
             <div style={{ display: 'inline-flex' }}>
-              {/* <div
-                className={`px-4 py-1 rounded labelbuttonfont grid ${
-                  isAccepted ? 'bg-green-100 ' : 'bg-yellow-100 '
-                }`}
-              >
-                <span
-                  style={{
-                    fontSize: '10px',
-                  }}
-                >
-                  <FaCircle />
-                </span>
-                {isAccepted ? 'Accepted' : 'Pending'}
-              </div> */}
               <div
                 className={`flex items-center px-4 py-1 ${
                   isAccepted ? 'bg-green-100 ' : 'bg-yellow-100 '

@@ -4,9 +4,11 @@ import logo from '../assets/logo.png';
 import { LuWalletMinimal } from 'react-icons/lu';
 import { FiShoppingBag } from 'react-icons/fi';
 import { LuUser } from 'react-icons/lu';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const WebsiteHeader = () => {
   const [activeTab, setActiveTab] = useState('My websites');
+  const navigate = useNavigate();
 
   return (
     <div className='flex justify-between items-center mb-6 border-b'>
@@ -15,7 +17,8 @@ const WebsiteHeader = () => {
           src={logo}
           alt='Kraken Logo'
           className='h-14'
-          style={{ marginRight: '8rem' }}
+          style={{ marginRight: '8rem', cursor: 'pointer' }}
+          onClick={() => navigate('/')}
         />
         <nav className='flex h-14'>
           <a
