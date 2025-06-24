@@ -22,7 +22,10 @@ const formSchema = z.object({
   country: z.string().min(1, 'Country is required'),
   language: z.string().min(1, 'Language is required'),
   category: z.array(z.string()).min(1, 'At least one category is required'),
-  description: z.string().min(1, 'Description is required'),
+  description: z
+    .string()
+    .min(350, 'Minimum 350 characters')
+    .min(1, 'Description is required'),
   isOwner: z.boolean().optional(),
 
   // Offer Form
@@ -53,17 +56,17 @@ const formSchema = z.object({
   ]),
 
   // Article Specification
-  isWritingIncluded: z.boolean(),
+  isWritingIncluded: z.string(),
   articleLengthOption: z.string().optional(),
   articleWordsMinSpec: z.number().min(0).optional(),
   articleWordsMaxSpec: z.number().min(0).optional(),
-  allowDofollow: z.boolean(),
+  allowDofollow: z.string(),
   linkType: z.string(),
   taggingPolicy: z.string(),
   advertiserLinksOption: z.string(),
   advertiserLinksMin: z.number().min(0).optional(),
   advertiserLinksMax: z.number().min(0).optional(),
-  otherLinks: z.boolean(),
+  otherLinks: z.string(),
   articleDescription: z.string().min(1, 'Description is required').optional(),
 });
 
@@ -109,17 +112,17 @@ const WebsiteDetailsPage: React.FC = () => {
       articleLinksMax: 0,
       samePriceForAllNiches: false,
       greyNichePrice: 0,
-      isWritingIncluded: true,
+      isWritingIncluded: 'yes',
       articleLengthOption: 'notLimited',
       articleWordsMinSpec: undefined,
       articleWordsMaxSpec: undefined,
-      allowDofollow: false,
+      allowDofollow: 'no',
       linkType: 'brandOnly',
       taggingPolicy: 'noTag',
       advertiserLinksOption: 'noTag',
       advertiserLinksMin: undefined,
       advertiserLinksMax: undefined,
-      otherLinks: false,
+      otherLinks: 'no',
       articleDescription: '',
     },
     mode: 'onChange',
@@ -161,6 +164,24 @@ const WebsiteDetailsPage: React.FC = () => {
         articleWordsMinSpec: websiteToEdit.articleWordsMin ?? undefined,
         articleWordsMaxSpec: websiteToEdit.articleWordsMax ?? undefined,
         articleDescription: websiteToEdit.articleDescription ?? '',
+        otherLinks:
+          typeof websiteToEdit.otherLinks === 'string'
+            ? websiteToEdit.otherLinks
+            : websiteToEdit.otherLinks === true
+            ? 'yes'
+            : 'no',
+        isWritingIncluded:
+          typeof websiteToEdit.isWritingIncluded === 'string'
+            ? websiteToEdit.isWritingIncluded
+            : websiteToEdit.isWritingIncluded === true
+            ? 'yes'
+            : 'no',
+        allowDofollow:
+          typeof websiteToEdit.allowDofollow === 'string'
+            ? websiteToEdit.allowDofollow
+            : websiteToEdit.allowDofollow === true
+            ? 'yes'
+            : 'no',
       });
       trigger();
     } else {
@@ -228,7 +249,7 @@ const WebsiteDetailsPage: React.FC = () => {
       trigger();
       return;
     }
-    const websiteData = {
+    const websiteData: any = {
       ...data,
       articleWordsMin: data.articleWordsMinSpec,
       articleWordsMax: data.articleWordsMaxSpec,
@@ -323,7 +344,7 @@ const WebsiteDetailsPage: React.FC = () => {
             type='submit'
             className='bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 mt-6'
           >
-            Save
+            {id ? 'Update' : 'Save'}
           </button>
         </form>
       </div>

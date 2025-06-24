@@ -1,7 +1,5 @@
-import React, { useEffect } from 'react';
-import { useForm, Controller } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
+import React from 'react';
+import { useForm } from 'react-hook-form';
 import './style.css';
 
 const ArticleSpecification: React.FC<any> = ({
@@ -11,6 +9,8 @@ const ArticleSpecification: React.FC<any> = ({
   articleLengthOption,
   advertiserLinksOption,
 }: any) => {
+  // Convert string value to boolean for proper comparison
+
   return (
     <>
       <h3 className='font-semibold text-gray-700 mb-4 mt-12 detailhighfont'>
@@ -26,7 +26,7 @@ const ArticleSpecification: React.FC<any> = ({
               <input
                 type='radio'
                 {...register('isWritingIncluded')}
-                value='true'
+                value='yes'
                 className='form-radio'
               />
               <span className='ml-2 radiofontinside'>Yes</span>
@@ -35,7 +35,7 @@ const ArticleSpecification: React.FC<any> = ({
               <input
                 type='radio'
                 {...register('isWritingIncluded')}
-                value='false'
+                value='no'
                 className='form-radio'
               />
               <span className='ml-2 radiofontinside'>
@@ -45,7 +45,7 @@ const ArticleSpecification: React.FC<any> = ({
           </div>
         </div>
 
-        {isWritingIncluded && (
+        {isWritingIncluded === 'yes' && (
           <>
             <div>
               <label className='block text-sm font-medium mb-1'>
@@ -210,7 +210,7 @@ const ArticleSpecification: React.FC<any> = ({
                   <input
                     type='radio'
                     {...register('allowDofollow')}
-                    value='true'
+                    value='yes'
                     className='form-radio'
                   />
                   <span className='ml-2 radiofontinside'>Yes</span>
@@ -219,7 +219,7 @@ const ArticleSpecification: React.FC<any> = ({
                   <input
                     type='radio'
                     {...register('allowDofollow')}
-                    value='false'
+                    value='no'
                     className='form-radio'
                   />
                   <span className='ml-2 radiofontinside'>No</span>
@@ -236,7 +236,7 @@ const ArticleSpecification: React.FC<any> = ({
                   <input
                     type='radio'
                     {...register('otherLinks')}
-                    value='true'
+                    value='yes'
                     className='form-radio'
                   />
                   <span className='ml-2 radiofontinside'>
@@ -248,7 +248,7 @@ const ArticleSpecification: React.FC<any> = ({
                   <input
                     type='radio'
                     {...register('otherLinks')}
-                    value='false'
+                    value='no'
                     className='form-radio'
                   />
                   <span className='ml-2 radiofontinside'>
