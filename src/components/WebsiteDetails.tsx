@@ -14,6 +14,8 @@ import WebsiteDetailsForm from './WebsiteDetailsForm';
 import ArticleSpecification from './ArticleSpecification';
 import Preconditions from './Preconditions';
 import './style.css';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 // Combined schema for all form sections
 const formSchema = z.object({
@@ -257,11 +259,31 @@ const WebsiteDetailsPage: React.FC = () => {
     };
     if (id && websiteToEdit) {
       dispatch(updateWebsite(websiteData));
+      toast.success('Website updated successfully!', {
+        position: 'top-right',
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     } else {
       dispatch(addWebsite(websiteData));
+      toast.success('Website added successfully!', {
+        position: 'top-right',
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     }
     localStorage.removeItem('formData');
-    navigate('/');
+    setTimeout(() => {
+      navigate('/');
+    }, 1000); // Small delay to let user see the toast
   };
 
   return (
@@ -348,6 +370,7 @@ const WebsiteDetailsPage: React.FC = () => {
           </button>
         </form>
       </div>
+      <ToastContainer />
     </div>
   );
 };
