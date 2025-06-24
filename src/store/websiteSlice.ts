@@ -11,6 +11,7 @@ interface Website {
   guestPostPrice?: number | any;
   linkInsertionPrice?: number | any;
   homePagePrice?: number;
+  description?: string;
   homePageDescription?: string;
   articleWordsMin?: number;
   articleWordsMax?: number;
@@ -30,7 +31,8 @@ const initialState: { websites: Website[] } = {
       guestPostPrice: { Gambling: 0, Crypto: 0, Adult: 0 },
       linkInsertionPrice: { Gambling: 0, Crypto: 0, Adult: 0 },
       homePagePrice: 0,
-      homePageDescription: '',
+      description: 'abc',
+      homePageDescription: 'abc',
       articleWordsMin: 0,
       articleWordsMax: 0,
       articleLinksMax: 0,
@@ -46,7 +48,8 @@ const initialState: { websites: Website[] } = {
       guestPostPrice: { Gambling: 0, Crypto: 0, Adult: 0 },
       linkInsertionPrice: { Gambling: 0, Crypto: 0, Adult: 0 },
       homePagePrice: 0,
-      homePageDescription: '',
+      description: 'abc',
+      homePageDescription: 'abc',
       articleWordsMin: 0,
       articleWordsMax: 0,
       articleLinksMax: 0,

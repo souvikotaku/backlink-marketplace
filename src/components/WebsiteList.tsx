@@ -127,7 +127,7 @@ const WebsiteList: React.FC = memo(() => {
                   onClick={() => navigate(`/edit/${website.id}`)}
                 >
                   <td className='p-3 tablecontent'>
-                    {website.url.replace(/^https?:\/\//, '')}
+                    {website.url?.replace(/^https?:\/\//, '')}
                   </td>
                   <td className='p-3 tablecontent'>
                     <ReactCountryFlag
