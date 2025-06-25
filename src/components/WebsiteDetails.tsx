@@ -136,8 +136,77 @@ const WebsiteDetailsPage: React.FC = () => {
   const advertiserLinksOption = watch('advertiserLinksOption');
   const samePriceForAllNiches = watch('samePriceForAllNiches');
 
+  // useEffect(() => {
+  //   if (websiteToEdit) {
+  //     const normalizedGuestPostPrice =
+  //       typeof websiteToEdit.guestPostPrice === 'number'
+  //         ? websiteToEdit.guestPostPrice
+  //         : websiteToEdit.guestPostPrice || {
+  //             Gambling: 0,
+  //             Crypto: 0,
+  //             Adult: 0,
+  //           };
+  //     const normalizedLinkInsertionPrice =
+  //       typeof websiteToEdit.linkInsertionPrice === 'number'
+  //         ? websiteToEdit.linkInsertionPrice
+  //         : websiteToEdit.linkInsertionPrice || {
+  //             Gambling: 0,
+  //             Crypto: 0,
+  //             Adult: 0,
+  //           };
+  //     reset({
+  //       ...websiteToEdit,
+  //       category: Array.isArray(websiteToEdit.category)
+  //         ? websiteToEdit.category
+  //         : websiteToEdit.category
+  //         ? [websiteToEdit.category]
+  //         : [],
+  //       guestPostPrice: normalizedGuestPostPrice,
+  //       linkInsertionPrice: normalizedLinkInsertionPrice,
+  //       articleWordsMinSpec: websiteToEdit.articleWordsMin ?? undefined,
+  //       articleWordsMaxSpec: websiteToEdit.articleWordsMax ?? undefined,
+  //       articleDescription: websiteToEdit.articleDescription ?? '',
+  //       otherLinks:
+  //         typeof websiteToEdit.otherLinks === 'string'
+  //           ? websiteToEdit.otherLinks
+  //           : websiteToEdit.otherLinks === true
+  //           ? 'yes'
+  //           : 'no',
+  //       isWritingIncluded:
+  //         typeof websiteToEdit.isWritingIncluded === 'string'
+  //           ? websiteToEdit.isWritingIncluded
+  //           : websiteToEdit.isWritingIncluded === true
+  //           ? 'yes'
+  //           : 'no',
+  //       allowDofollow:
+  //         typeof websiteToEdit.allowDofollow === 'string'
+  //           ? websiteToEdit.allowDofollow
+  //           : websiteToEdit.allowDofollow === true
+  //           ? 'yes'
+  //           : 'no',
+  //     });
+  //     trigger();
+  //   } else {
+  //     localStorage.removeItem('formData');
+  //     reset();
+  //   }
+  // }, [websiteToEdit, reset, trigger]);
+
   useEffect(() => {
-    if (websiteToEdit) {
+    // Load form data from localStorage if no websiteToEdit (i.e., adding new website)
+    if (!websiteToEdit) {
+      const savedFormData = localStorage.getItem('formData');
+      if (savedFormData) {
+        try {
+          const parsedData = JSON.parse(savedFormData);
+          reset(parsedData);
+          trigger();
+        } catch (err) {
+          console.error('Could not load form data from localStorage:', err);
+        }
+      }
+    } else {
+      // Load websiteToEdit data for editing
       const normalizedGuestPostPrice =
         typeof websiteToEdit.guestPostPrice === 'number'
           ? websiteToEdit.guestPostPrice
@@ -186,9 +255,6 @@ const WebsiteDetailsPage: React.FC = () => {
             : 'no',
       });
       trigger();
-    } else {
-      localStorage.removeItem('formData');
-      reset();
     }
   }, [websiteToEdit, reset, trigger]);
 
