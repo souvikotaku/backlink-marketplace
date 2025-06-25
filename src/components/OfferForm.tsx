@@ -75,7 +75,7 @@ const OfferForm: React.FC<any> = ({
                   <label className='block text-sm font-medium mb-1'>
                     Guest Posting
                   </label>
-                  <input
+                  {/* <input
                     type='number'
                     {...register('guestPostPrice1', {
                       valueAsNumber: true,
@@ -87,13 +87,37 @@ const OfferForm: React.FC<any> = ({
                     <p className='text-red-500 text-sm'>
                       {errors.guestPostPrice1.message}
                     </p>
-                  )}
+                  )} */}
+                  <div className='relative'>
+                    <span
+                      className='absolute inset-y-0 left-0 flex items-center pl-4 pr-4'
+                      style={{
+                        borderRight: '1px solid #EAEAEA',
+                        color: 'lightgrey',
+                        fontSize: '19px',
+                      }}
+                    >
+                      $
+                    </span>
+                    <input
+                      type='number'
+                      {...register('guestPostPrice1', { valueAsNumber: true })}
+                      className='w-full pl-12 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600'
+                      placeholder='Enter price'
+                      style={{ paddingLeft: '3.5rem' }}
+                    />
+                    {errors.guestPostPrice1 && (
+                      <p className='text-red-500 text-sm'>
+                        {errors.guestPostPrice1.message}
+                      </p>
+                    )}
+                  </div>
                 </div>
                 <div>
                   <label className='block text-sm font-medium mb-1'>
                     Link Insertion
                   </label>
-                  <input
+                  {/* <input
                     type='number'
                     {...register('linkInsertionPrice1', {
                       valueAsNumber: true,
@@ -105,7 +129,33 @@ const OfferForm: React.FC<any> = ({
                     <p className='text-red-500 text-sm'>
                       {errors.linkInsertionPrice1.message}
                     </p>
-                  )}
+                  )} */}
+                  <div className='relative'>
+                    <span
+                      className='absolute inset-y-0 left-0 flex items-center pl-4 pr-4'
+                      style={{
+                        borderRight: '1px solid #EAEAEA',
+                        color: 'lightgrey',
+                        fontSize: '19px',
+                      }}
+                    >
+                      $
+                    </span>
+                    <input
+                      type='number'
+                      {...register('linkInsertionPrice1', {
+                        valueAsNumber: true,
+                      })}
+                      className='w-full pl-12 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600'
+                      placeholder='Enter price'
+                      style={{ paddingLeft: '3.5rem' }}
+                    />
+                    {errors.linkInsertionPrice1 && (
+                      <p className='text-red-500 text-sm'>
+                        {errors.linkInsertionPrice1.message}
+                      </p>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
@@ -117,7 +167,7 @@ const OfferForm: React.FC<any> = ({
                   <label className='block text-sm font-medium mb-1'>
                     Price
                   </label>
-                  <input
+                  {/* <input
                     type='number'
                     {...register('homePagePrice', { valueAsNumber: true })}
                     className='w-full p-2 border rounded-md'
@@ -127,7 +177,33 @@ const OfferForm: React.FC<any> = ({
                     <p className='text-red-500 text-sm'>
                       {errors.homePagePrice.message}
                     </p>
-                  )}
+                  )} */}
+                  <div className='relative'>
+                    <span
+                      className='absolute inset-y-0 left-0 flex items-center pl-4 pr-4'
+                      style={{
+                        borderRight: '1px solid #EAEAEA',
+                        color: 'lightgrey',
+                        fontSize: '19px',
+                      }}
+                    >
+                      $
+                    </span>
+                    <input
+                      type='number'
+                      {...register('homePagePrice', {
+                        valueAsNumber: true,
+                      })}
+                      className='w-full pl-12 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600'
+                      placeholder='Enter price'
+                      style={{ paddingLeft: '3.5rem' }}
+                    />
+                    {errors.homePagePrice && (
+                      <p className='text-red-500 text-sm'>
+                        {errors.homePagePrice.message}
+                      </p>
+                    )}
+                  </div>
                 </div>
               </div>
               <div className='grid grid-cols-3 gap-4 mt-6'>
@@ -167,7 +243,7 @@ const OfferForm: React.FC<any> = ({
                     <label className='block text-sm font-medium mb-1'>
                       Enter Price
                     </label>
-                    <input
+                    {/* <input
                       type='number'
                       {...register('greyNichePrice', {
                         valueAsNumber: true,
@@ -179,21 +255,57 @@ const OfferForm: React.FC<any> = ({
                       <p className='text-red-500 text-sm'>
                         {errors.greyNichePrice.message}
                       </p>
-                    )}
+                    )} */}
+                    <div className='relative'>
+                      <span
+                        className='absolute inset-y-0 left-0 flex items-center pl-4 pr-4'
+                        style={{
+                          borderRight: '1px solid #EAEAEA',
+                          color: 'lightgrey',
+                          fontSize: '19px',
+                        }}
+                      >
+                        $
+                      </span>
+                      <input
+                        type='number'
+                        {...register('greyNichePrice', {
+                          valueAsNumber: true,
+                        })}
+                        className='w-full pl-12 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600'
+                        placeholder='Enter price'
+                        style={{ paddingLeft: '3.5rem' }}
+                      />
+                      {errors.greyNichePrice && (
+                        <p className='text-red-500 text-sm'>
+                          {errors.greyNichePrice.message}
+                        </p>
+                      )}
+                    </div>
                   </div>
                 </div>
               )}
               <div className='grid grid-cols-4 gap-4'>
                 {(['Gambling', 'Crypto', 'Adult'] as const).map((niche) => (
                   <div key={niche}>
-                    <label className='block text-sm font-medium mb-1'>
+                    <label
+                      className='block text-sm font-medium mb-1'
+                      style={{
+                        color: samePriceForAllNiches ? 'lightgrey' : 'black',
+                      }}
+                    >
                       {niche}
                     </label>
-                    <div className='space-y-2'>
-                      <label className='block text-xs font-medium mb-1'>
+                    <div className='space-y-2 mt-3'>
+                      <label
+                        className='block text-xs font-medium mb-1'
+                        style={{
+                          color: samePriceForAllNiches ? 'lightgrey' : 'black',
+                        }}
+                      >
                         Price for Guest Posting
                       </label>
-                      <input
+                      {/* <input
                         type='number'
                         {...register(`guestPostPrice.${niche}` as const, {
                           valueAsNumber: true,
@@ -201,13 +313,46 @@ const OfferForm: React.FC<any> = ({
                         className='w-full p-2 border rounded-md'
                         placeholder='Enter price'
                         disabled={samePriceForAllNiches}
-                      />
+                      /> */}
+                      <div className='relative'>
+                        <span
+                          className='absolute inset-y-0 left-0 flex items-center pl-4 pr-4'
+                          style={{
+                            borderRight: '1px solid #EAEAEA',
+                            color: 'lightgrey',
+                            fontSize: '19px',
+                          }}
+                        >
+                          $
+                        </span>
+                        <input
+                          type='number'
+                          {...register(`guestPostPrice.${niche}` as const, {
+                            valueAsNumber: true,
+                          })}
+                          className='w-full pl-12 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600'
+                          placeholder='Enter price'
+                          style={{
+                            paddingLeft: '3.5rem',
+                            backgroundColor: 'white',
+                            color: samePriceForAllNiches
+                              ? 'lightgrey'
+                              : 'black',
+                          }}
+                          disabled={samePriceForAllNiches}
+                        />
+                      </div>
                     </div>
-                    <div>
-                      <label className='block text-xs font-medium mb-1'>
+                    <div className='mt-3'>
+                      <label
+                        className='block text-xs font-medium mb-1'
+                        style={{
+                          color: samePriceForAllNiches ? 'lightgrey' : 'black',
+                        }}
+                      >
                         Price for Link Insertion
                       </label>
-                      <input
+                      {/* <input
                         type='number'
                         {...register(`linkInsertionPrice.${niche}` as const, {
                           valueAsNumber: true,
@@ -215,7 +360,35 @@ const OfferForm: React.FC<any> = ({
                         className='w-full p-2 border rounded-md'
                         placeholder='Enter price'
                         disabled={samePriceForAllNiches}
-                      />
+                      /> */}
+                      <div className='relative'>
+                        <span
+                          className='absolute inset-y-0 left-0 flex items-center pl-4 pr-4'
+                          style={{
+                            borderRight: '1px solid #EAEAEA',
+                            color: 'lightgrey',
+                            fontSize: '19px',
+                          }}
+                        >
+                          $
+                        </span>
+                        <input
+                          type='number'
+                          {...register(`linkInsertionPrice.${niche}` as const, {
+                            valueAsNumber: true,
+                          })}
+                          className='w-full pl-12 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600'
+                          placeholder='Enter price'
+                          style={{
+                            paddingLeft: '3.5rem',
+                            backgroundColor: 'white',
+                            color: samePriceForAllNiches
+                              ? 'lightgrey'
+                              : 'black',
+                          }}
+                          disabled={samePriceForAllNiches}
+                        />
+                      </div>
                     </div>
                   </div>
                 ))}

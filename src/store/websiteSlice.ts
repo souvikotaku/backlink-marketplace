@@ -11,6 +11,7 @@ interface Website {
   guestPostPrice?: number | any;
   linkInsertionPrice?: number | any;
   homePagePrice?: number;
+  greyNichePrice?: number;
   description?: string;
   homePageDescription?: string;
   articleWordsMin?: number;
@@ -31,15 +32,16 @@ interface Website {
 const defaultWebsites: Website[] = [
   {
     id: 1,
-    url: 'https://example.com',
-    country: 'United States',
-    language: 'English',
+    url: 'https://zelenskyi.com',
+    country: 'Ukraine',
+    language: 'Ukrainian',
     category: 'Environment',
     guestPostPrice1: 0,
     linkInsertionPrice1: 0,
     guestPostPrice: { Gambling: 0, Crypto: 0, Adult: 0 },
     linkInsertionPrice: { Gambling: 0, Crypto: 0, Adult: 0 },
     homePagePrice: 0,
+    greyNichePrice: 0,
     description:
       'sdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsd',
     homePageDescription: 'abc',
@@ -59,15 +61,16 @@ const defaultWebsites: Website[] = [
   },
   {
     id: 2,
-    url: 'https://example.de',
-    country: 'Germany',
-    language: 'German',
+    url: 'https://putin.ru',
+    country: 'Russia',
+    language: 'Russian',
     category: ['Events', 'Family / Parenting'],
     guestPostPrice1: 0,
     linkInsertionPrice1: 0,
     guestPostPrice: { Gambling: 0, Crypto: 0, Adult: 0 },
     linkInsertionPrice: { Gambling: 0, Crypto: 0, Adult: 0 },
     homePagePrice: 0,
+    greyNichePrice: 0,
     description:
       'sdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsdsdsddsd',
     homePageDescription: 'abc',

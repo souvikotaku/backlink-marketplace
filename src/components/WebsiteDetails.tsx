@@ -231,6 +231,7 @@ const WebsiteDetailsPage: React.FC = () => {
           ? [websiteToEdit.category]
           : [],
         guestPostPrice: normalizedGuestPostPrice,
+        greyNichePrice: websiteToEdit.greyNichePrice ?? 0,
         linkInsertionPrice: normalizedLinkInsertionPrice,
         articleWordsMinSpec: websiteToEdit.articleWordsMin ?? undefined,
         articleWordsMaxSpec: websiteToEdit.articleWordsMax ?? undefined,
